@@ -1,19 +1,12 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import SearchBar from './components/SearchBar/SearchBar';
+import VillaList from './components/VillaList';
+import { ListVilla } from './utils/data';
 
 function App() {
   return (
-    <div className='App bg-slate-300'>
-      <header className='App-header pt-5'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className='App-link bg-gray-50' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-          Learn React
-        </a>
-      </header>
+    <div className='App py-5 px-[100px] max-w-[1366px] mx-auto'>
+      <SearchBar />
+      <VillaList data={ListVilla} />
     </div>
   );
 }
