@@ -2,7 +2,7 @@ import { IVilla } from '../utils/data';
 
 export default function VillaList(props: { data: Array<IVilla | any> }): JSX.Element {
   return (
-    <div className='grid lg:grid-cols-4 gap-5 lg:my-10   '>
+    <div className='grid lg:grid-cols-4 grid-cols-2 gap-5 lg:my-10   '>
       {props.data.map((item) => (
         <div key={item.id} className=''>
           <img src={item.photo} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
