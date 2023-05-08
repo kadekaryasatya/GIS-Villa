@@ -14,7 +14,7 @@ export default function Maps() {
     <>
       <p className='text-2xl font-semibold'>Search Villa Nearby</p>
       <div className='border-2 border-cyan-950 mt-2'>
-        <MapContainer center={[51.505, -0.09]} zoom={3}>
+        <MapContainer center={[-8.4095188, 115.188919]} zoom={10}>
           <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors" />
           {markerData.map((marker: IVilla) => (
             <Marker key={marker.id} position={[marker.lat, marker.lng]}>
