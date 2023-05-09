@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <div className='App py-5 px-[100px] max-w-[1366px] mx-auto'>
+    <>
       <Navbar />
       <BrowserRouter>
         <Routes>
@@ -14,7 +14,7 @@ function App() {
           <Route path='/maps' element={<Maps />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 

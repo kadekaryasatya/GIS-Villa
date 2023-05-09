@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { IVilla, ListVilla } from '../../utils/data';
+import L from 'leaflet';
+import icon from './marker.png';
+import VillaInfo from './VillaInfo';
 
 export default function Maps() {
   // Initialize state for the marker data
   const [markerData, setMarkerData] = useState<IVilla[]>([]);
+
+  const locationIcon = L.icon({
+    iconUrl: icon,
+    iconSize: [50, 50],
+    iconAnchor: [15, 30],
+  });
 
   // Set the marker data when the component mounts
   useEffect(() => {
@@ -12,15 +21,13 @@ export default function Maps() {
   }, []);
   return (
     <>
-      <p className='text-2xl font-semibold'>Search Villa Nearby</p>
-      <div className='border-2 border-cyan-950 mt-2'>
-        <MapContainer center={[-8.4095188, 115.188919]} zoom={10}>
+      <div className=''>
+        <MapContainer center={[-8.6828693, 115.2004822]} zoom={13}>
           <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors" />
-          {markerData.map((marker: IVilla) => (
-            <Marker key={marker.id} position={[marker.lat, marker.lng]}>
+          {markerData.map((villa: IVilla) => (
+            <Marker key={villa.id} position={[villa.lat, villa.lng]} icon={locationIcon}>
               <Popup>
-                <p>{marker.name}</p>
-                <p>{marker.location}</p>
+                <VillaInfo data={villa} />
               </Popup>
             </Marker>
           ))}
