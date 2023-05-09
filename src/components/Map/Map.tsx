@@ -4,6 +4,7 @@ import { IVilla, ListVilla } from '../../utils/data';
 import L from 'leaflet';
 import icon from './marker.png';
 import VillaInfo from './VillaInfo';
+import { Link } from 'react-router-dom';
 
 export default function Maps() {
   // Initialize state for the marker data
@@ -27,7 +28,9 @@ export default function Maps() {
           {markerData.map((villa: IVilla) => (
             <Marker key={villa.id} position={[villa.lat, villa.lng]} icon={locationIcon}>
               <Popup>
-                <VillaInfo data={villa} />
+                <Link to={`/villa/${villa.id}`}>
+                  <VillaInfo data={villa} />
+                </Link>
               </Popup>
             </Marker>
           ))}

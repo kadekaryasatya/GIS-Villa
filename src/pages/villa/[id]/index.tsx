@@ -1,8 +1,13 @@
-import { villa } from '../../../utils/data';
+import { useParams } from 'react-router-dom';
+import { IVilla } from '../../../utils/data';
 
-export default function VillaDetailPages() {
+export default function VillaDetailPages(props: { data: Array<IVilla | any> }) {
+  const { data } = props;
+  const { id } = useParams();
+
+  const villa = data.find((l) => l.id === parseInt(id || ''));
   return (
-    <div className='py-5'>
+    <div className='py-5 px-[100px] max-w-[1366px] mx-auto'>
       <div className='flex justify-between'>
         <h1 className='text-4xl font-semibold '>{villa.name}</h1>
         <p
