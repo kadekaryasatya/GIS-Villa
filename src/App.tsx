@@ -13,8 +13,9 @@ function App() {
 
       <Routes>
         <Route path='/' element={<VillaListPages />} />
-        <Route path='/maps' element={<Maps />} />
+        <Route path='/villa-list' element={<VillaListPages />} />
         <Route path='/villa/:id' element={<VillaDetailPages data={ListVilla} />} />
+        <Route path='/maps' element={<Maps />} />
       </Routes>
     </>
   );
