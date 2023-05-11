@@ -5,10 +5,21 @@ import L from 'leaflet';
 import icon from './marker.png';
 import VillaInfo from './VillaInfo';
 import { Link } from 'react-router-dom';
+import { getVillaList } from '../../utils/api';
 
 export default function Maps() {
   // Initialize state for the marker data
   const [markerData, setMarkerData] = useState<IVilla[]>([]);
+
+  const [villaList, setVillaList] = useState<Array<IVilla>>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const records = await getVillaList();
+      setVillaList(records);
+    }
+    fetchData();
+  }, []);
 
   const locationIcon = L.icon({
     iconUrl: icon,
@@ -18,8 +29,8 @@ export default function Maps() {
 
   // Set the marker data when the component mounts
   useEffect(() => {
-    setMarkerData(ListVilla);
-  }, []);
+    setMarkerData(villaList);
+  }, [villaList]);
   return (
     <>
       <div className=''>

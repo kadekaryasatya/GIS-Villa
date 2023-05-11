@@ -1,5 +1,5 @@
 export interface IVilla {
-  id: number;
+  id: string;
   name: string;
   location: string;
   description: string;
@@ -11,7 +11,7 @@ export interface IVilla {
 
 export const ListVilla: IVilla[] = [
   {
-    id: 1,
+    id: '1',
     name: 'Villa Cyan',
     location: 'Kerobokan',
     description: 'Description for product 1',
@@ -21,7 +21,7 @@ export const ListVilla: IVilla[] = [
     lng: 115.15584390105502,
   },
   {
-    id: 2,
+    id: '2',
     name: 'Jerami Villa',
     location: 'Denpasar',
     description: 'Description for product 2',
@@ -31,7 +31,7 @@ export const ListVilla: IVilla[] = [
     lng: 115.20284258100577,
   },
   {
-    id: 3,
+    id: '3',
     name: 'Villa De Kerobokan',
     location: 'Kerobokan',
     description: 'Description for product 3',
@@ -41,7 +41,7 @@ export const ListVilla: IVilla[] = [
     lng: 115.17944546944283,
   },
   {
-    id: 4,
+    id: '4',
     name: 'Villa June',
     location: 'Kerobokan',
     description: 'Description for product 4',
@@ -51,7 +51,7 @@ export const ListVilla: IVilla[] = [
     lng: 115.1604680237137,
   },
   {
-    id: 5,
+    id: '5',
     name: 'Joglo Villa Bali',
     location: 'Denpasar',
     description: 'Description for product 5',
@@ -62,7 +62,7 @@ export const ListVilla: IVilla[] = [
     lng: 115.22587925990408,
   },
   {
-    id: 6,
+    id: '6',
     name: 'Granzotto Style Villa',
     location: 'Denpasar',
     description: 'Description for product 6',
@@ -72,7 +72,7 @@ export const ListVilla: IVilla[] = [
     lng: 115.2345701783658,
   },
   {
-    id: 7,
+    id: '7',
     name: 'Saka Umah Villa',
     location: 'Denpasar',
     description: 'Description for product 7',
@@ -82,7 +82,7 @@ export const ListVilla: IVilla[] = [
     lng: 115.21070214494173,
   },
   {
-    id: 8,
+    id: '8',
     name: 'Villa Bali',
     location: 'Nusa Dua',
     description: 'Description for product 8',
@@ -92,15 +92,3 @@ export const ListVilla: IVilla[] = [
     lng: -0.1278,
   },
 ];
-
-export const villa: IVilla = {
-  id: 1,
-  name: 'Villa Bali',
-  location: 'Nusa Dua',
-  description:
-    'Villa in Bali is a stunning retreat nestled amidst the lush tropical landscape of the Indonesian island. The villa boasts a perfect blend of traditional Balinese architecture and modern luxury amenities, providing guests with an unforgettable experience.',
-  photo: 'https://images.unsplash.com/photo-1626249893774-dc11ed24adbe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzN8fHZpbGxhfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-  price: 20000,
-  lat: 51.5074,
-  lng: -0.1278,
-};
