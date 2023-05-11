@@ -19,9 +19,9 @@ export default function VillaList(): JSX.Element {
     <>
       <div className='grid lg:grid-cols-4 grid-cols-2 gap-5 lg:my-10   '>
         {villaList.map((item) => (
-          <Link to={`/villa/${item.id}`}>
+          <Link to={`/villa/${item.id}`} key={item.id}>
             <div key={item.id} className=''>
-              <img src={`https://gis-api.pockethost.io/api/files/784ca34x8mjab58/` + item.id + `/` + item.photo} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
+              <img src={`https://gis-api.pockethost.io/api/files/784ca34x8mjab58/` + item.id + `/` + item.thumbnail} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
               <h2 className='font-semibold text-md mt-1'>{item.name}</h2>
               <div className='flex gap-1 items-center'>
                 <img src='/icons/location.png' alt='location' className='h-4 cursor-pointer' />

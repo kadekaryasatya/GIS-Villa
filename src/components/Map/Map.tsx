@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { IVilla, ListVilla } from '../../utils/data';
+import { IVilla } from '../../utils/data';
 import L from 'leaflet';
 import icon from './marker.png';
 import VillaInfo from './VillaInfo';

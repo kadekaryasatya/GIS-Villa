@@ -3,8 +3,8 @@ import Navbar from './components/Navbar/Navbar';
 import VillaListPages from './pages/villa-list';
 // import VillaDetailPages from './pages/villa/[id]';
 import { Route, Routes } from 'react-router-dom';
-import VillaDetailPages from './pages/villa/[id]';
-import { ListVilla } from './utils/data';
+// import VillaDetailPages from './pages/villa/[id]';
+// import { ListVilla } from './utils/data';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path='/' element={<VillaListPages />} />
         <Route path='/villa-list' element={<VillaListPages />} />
-        <Route path='/villa/:id' element={<VillaDetailPages data={ListVilla} />} />
+        {/* <Route path='/villa/:id' element={<VillaDetailPages data={ListVilla} />} /> */}
         <Route path='/maps' element={<Maps />} />
       </Routes>
     </>
