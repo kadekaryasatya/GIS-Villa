@@ -13,6 +13,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.leaflet-popup {
+  bottom: 14px;
+  left: -90px;
+}
+
 .leaflet-container {
   width: 100%;
   min-height: 90vh;

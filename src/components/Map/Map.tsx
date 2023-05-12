@@ -38,7 +38,7 @@ export default function Maps() {
           <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors" />
           {markerData.map((villa: IVilla) => (
             <Marker key={villa.id} position={[villa.lat, villa.lng]} icon={locationIcon}>
-              <Popup>
+              <Popup className=''>
                 <Link to={`/villa/${villa.id}`}>
                   <VillaInfo data={villa} />
                 </Link>

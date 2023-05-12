@@ -14,7 +14,6 @@ export default function VillaList(): JSX.Element {
     fetchData();
   }, []);
 
-  console.log('villaList :>> ', villaList);
   return (
     <>
       <div className='grid lg:grid-cols-4 grid-cols-2 gap-5 lg:my-10   '>
