@@ -5,7 +5,7 @@ import { getVillaDetail } from '../../../utils/api';
 
 export default function VillaDetailPages() {
   // const { data } = props;
-  // const { id } = useParams();
+  const { id } = useParams();
 
   // const villa = data.find((l) => l.id === (id || ''));
 
@@ -14,14 +14,13 @@ export default function VillaDetailPages() {
   useEffect(() => {
     const fetchVilla = async () => {
       try {
-        const data = await getVillaDetail();
+        const data = await getVillaDetail(id);
         setVilla(data);
       } catch (error) {}
     };
     fetchVilla();
-  }, []);
+  }, [id]);
 
-  console.log('villa :>> ', villa);
   return (
     <>
       {villa ? (

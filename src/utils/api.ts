@@ -26,26 +26,39 @@ async function getVillaList(): Promise<IVilla[]> {
   return villas;
 }
 
-async function getVillaDetail(): Promise<IVilla> {
-  const record = await pb.collection('villa').getOne('RECORD_ID', {
-    sort: '-created',
+async function getVillaDetail(id: any): Promise<IVilla> {
+  const record = await pb.collection('villa').getOne(id, {
     expand: 'villa_photos(villa)',
   });
-  const villas: IVilla = record.map((record: any) => {
-    return {
-      id: record.id,
-      name: record.name,
-      description: record.description,
-      location: record.location,
-      price: record.price,
-      lat: record.latitude,
-      lng: record.longitude,
-      photo: record.expand['villa_photos(villa'],
-      thumbnail: record.photo,
-    };
-  });
+  console.log('record :>> ', record);
 
-  return villas;
+  const villa: IVilla = {
+    id: record.id,
+    name: record.name,
+    description: record.description,
+    location: record.location,
+    price: record.price,
+    lat: record.latitude,
+    lng: record.longitude,
+    photo: record.expand['villa_photos(villa'],
+    thumbnail: record.photo,
+  } as IVilla;
+
+  // const villas: IVilla = record.map((record: any) => {
+  //   return {
+  //     id: record.id,
+  //     name: record.name,
+  //     description: record.description,
+  //     location: record.location,
+  //     price: record.price,
+  //     lat: record.latitude,
+  //     lng: record.longitude,
+  //     photo: record.expand['villa_photos(villa'],
+  //     thumbnail: record.photo,
+  //   };
+  // });
+  console.log('villa :>> ', villa);
+  return villa;
 }
 
 export { getVillaList, getVillaDetail };
