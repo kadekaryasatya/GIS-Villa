@@ -40,7 +40,7 @@ async function getVillaDetail(id: any): Promise<IVilla> {
     price: record.price,
     lat: record.latitude,
     lng: record.longitude,
-    photo: record.expand['villa_photos(villa'],
+    photo: record.expand['villa_photos(villa)'],
     thumbnail: record.photo,
   } as IVilla;
 

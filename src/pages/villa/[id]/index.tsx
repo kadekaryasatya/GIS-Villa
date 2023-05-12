@@ -39,32 +39,12 @@ export default function VillaDetailPages() {
             <img src='/icons/location.png' alt='location' className='h-4 cursor-pointer' />
             <p className='text-orange-500'>{villa.location}</p>
           </div>
-          <div className='container  py-2 l'>
-            <div className='-m-1 flex flex-wrap md:-m-2'>
-              <div className='flex w-1/2 flex-wrap'>
-                <div className='w-1/2 p-1 md:p-1'>
-                  <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={villa.photo} />
-                </div>
-                <div className='w-1/2 p-1 md:p-1'>
-                  <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={villa.photo} />
-                </div>
-                <div className='w-full p-1 md:p-1'>
-                  <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={villa.photo} />
-                </div>
-              </div>
-              <div className='flex w-1/2 flex-wrap'>
-                <div className='w-full p-1 md:p-1'>
-                  <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={villa.photo} />
-                </div>
-                <div className='w-1/2 p-1 md:p-1'>
-                  <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={villa.photo} />
-                </div>
-                <div className='w-1/2 p-1 md:p-1'>
-                  <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={villa.photo} />
-                </div>
-              </div>
+          {villa.photo.map((item: any) => (
+            <div className='container  py-2 l' key={item.id}>
+              <img src={`https://gis-api.pockethost.io/api/files/dvuh6i6d1rxa2so/` + item.id + `/` + item.path_photo} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
             </div>
-          </div>
+          ))}
+
           <h1 className='text-2xl font-semibold mt-5'>Tentang Tempat ini </h1>
           <h1 className='text-lg mt-3 w-3/4'>{villa.description}</h1>
         </div>
