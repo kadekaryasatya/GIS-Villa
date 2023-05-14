@@ -7,6 +7,7 @@ export interface IVilla {
   lat: number;
   lng: number;
   photo: any | Array<any>;
+  category: any | Array<any>;
   thumbnail: string;
 }
 

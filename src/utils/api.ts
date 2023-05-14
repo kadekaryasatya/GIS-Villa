@@ -6,7 +6,7 @@ const pb = new PocketBase('https://gis-api.pockethost.io');
 async function getVillaList(): Promise<IVilla[]> {
   const records = await pb.collection('villa').getFullList({
     sort: '-created',
-    expand: 'villa_photos(villa)',
+    expand: 'villa_photos(villa),category(villa).detail_category',
   });
   const villas: IVilla[] = records.map((record) => {
     return {
@@ -18,6 +18,7 @@ async function getVillaList(): Promise<IVilla[]> {
       lat: record.latitude,
       lng: record.longitude,
       photo: record.expand['villa_photos(villa)'],
+      category: record.expand['category(villa)'],
       thumbnail: record.photo,
     };
   });
@@ -28,7 +29,7 @@ async function getVillaList(): Promise<IVilla[]> {
 
 async function getVillaDetail(id: any): Promise<IVilla> {
   const record = await pb.collection('villa').getOne(id, {
-    expand: 'villa_photos(villa)',
+    expand: 'villa_photos(villa),category(villa).detail_category',
   });
   console.log('record :>> ', record);
 
@@ -41,6 +42,8 @@ async function getVillaDetail(id: any): Promise<IVilla> {
     lat: record.latitude,
     lng: record.longitude,
     photo: record.expand['villa_photos(villa)'],
+    category: record.expand['category(villa)'],
+
     thumbnail: record.photo,
   } as IVilla;
 

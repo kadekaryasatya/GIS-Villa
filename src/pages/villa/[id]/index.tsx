@@ -39,14 +39,31 @@ export default function VillaDetailPages() {
             <img src='/icons/location.png' alt='location' className='h-4 cursor-pointer' />
             <p className='text-orange-500'>{villa.location}</p>
           </div>
-          {villa.photo.map((item: any) => (
-            <div className='container  py-2 l' key={item.id}>
-              <img src={`https://gis-api.pockethost.io/api/files/dvuh6i6d1rxa2so/` + item.id + `/` + item.path_photo} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
-            </div>
-          ))}
+          <div className='py-2 grid grid-cols-4 gap-1 '>
+            {villa.photo.map((item: any) => (
+              <img key={item.id} src={`https://gis-api.pockethost.io/api/files/dvuh6i6d1rxa2so/` + item.id + `/` + item.path_photo} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
+            ))}
+          </div>
 
-          <h1 className='text-2xl font-semibold mt-5'>Tentang Tempat ini </h1>
-          <h1 className='text-lg mt-3 w-3/4'>{villa.description}</h1>
+          {/* Description */}
+          <>
+            <h1 className='text-2xl font-semibold mt-5'>Tentang Tempat ini </h1>
+            <h1 className='text-lg mt-3 w-3/4'>{villa.description}</h1>
+          </>
+
+          {/* Category */}
+          {villa.category && (
+            <>
+              <h1 className='text-2xl font-semibold mt-5'>Category</h1>
+              <div className='py-2 flex gap-2 '>
+                {villa.category.map((item: any) => (
+                  <div key={item.expand.detail_category.id}>
+                    <h1>{item.expand.detail_category.name}</h1>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       ) : (
         <>
