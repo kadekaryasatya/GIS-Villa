@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { IVilla } from '../../../utils/data';
 import { useState, useEffect } from 'react';
 import { getVillaDetail } from '../../../utils/api';
+import Badge from '../../../components/Badge/Badge';
 
 export default function VillaDetailPages() {
   // const { data } = props;
@@ -39,27 +40,44 @@ export default function VillaDetailPages() {
             <img src='/icons/location.png' alt='location' className='h-4 cursor-pointer' />
             <p className='text-orange-500'>{villa.location}</p>
           </div>
-          <div className='py-2 grid grid-cols-4 gap-1 '>
-            {villa.photo.map((item: any) => (
-              <img key={item.id} src={`https://gis-api.pockethost.io/api/files/dvuh6i6d1rxa2so/` + item.id + `/` + item.path_photo} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
-            ))}
-          </div>
 
-          {/* Description */}
-          <>
-            <h1 className='text-2xl font-semibold mt-5'>Tentang Tempat ini </h1>
-            <h1 className='text-lg mt-3 w-3/4'>{villa.description}</h1>
-          </>
-
+          <hr />
           {/* Category */}
           {villa.category && (
             <>
-              <h1 className='text-2xl font-semibold mt-5'>Category</h1>
-              <div className='py-2 flex gap-2 '>
+              <div className='flex gap-2 py-5'>
                 {villa.category.map((item: any) => (
                   <div key={item.expand.detail_category.id}>
-                    <h1>{item.expand.detail_category.name}</h1>
+                    <Badge name={item.expand.detail_category.name} />
                   </div>
+                ))}
+              </div>
+            </>
+          )}
+          <hr className='mb-5' />
+
+          {/* Photo */}
+          {villa.photo && (
+            <div className='py-2 grid grid-cols-4 gap-1 '>
+              {villa.photo.map((item: any) => (
+                <img key={item.id} src={`https://gis-api.pockethost.io/api/files/dvuh6i6d1rxa2so/` + item.id + `/` + item.path_photo} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
+              ))}
+            </div>
+          )}
+
+          {/* Description */}
+          <>
+            <h1 className='text-2xl font-semibold mt-5'>Description</h1>
+            <h1 className='text-lg mt-3 w-3/4'>{villa.description}</h1>
+          </>
+
+          {/* House Rules */}
+          {villa.house_rules && (
+            <>
+              <h1 className='text-2xl font-semibold mt-5'>House Rules </h1>
+              <div className='flex-col gap-2 py-5'>
+                {villa.house_rules.map((item: any) => (
+                  <div key={item.expand.house_rules_detail.id}>{item.allowed ? <h1 className='text-lg'>{item.expand.house_rules_detail.name}</h1> : <h1 className='text-lg line-through'>{item.expand.house_rules_detail.name}</h1>}</div>
                 ))}
               </div>
             </>

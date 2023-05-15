@@ -1,4 +1,5 @@
 import { IVilla } from '../../utils/data';
+import Badge from '../Badge/Badge';
 
 const VillaInfo = (props: { data: IVilla }) => {
   const { data } = props;
@@ -22,6 +23,19 @@ const VillaInfo = (props: { data: IVilla }) => {
           <p className='text-sm mt-1'>{data.location}</p>
         </div>
         <p className='line-clamp-2 mt-1'>{data.description}</p>
+
+        {/* Category */}
+        {data.category && (
+          <>
+            <div className='py-2 flex gap-1'>
+              {data.category.slice(0, 3).map((item: any) => (
+                <div key={item.expand.detail_category.id}>
+                  <Badge name={item.expand.detail_category.name} />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

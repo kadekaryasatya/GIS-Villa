@@ -8,6 +8,7 @@ export interface IVilla {
   lng: number;
   photo: any | Array<any>;
   category: any | Array<any>;
+  house_rules?: any | Array<any>;
   thumbnail: string;
 }
 
