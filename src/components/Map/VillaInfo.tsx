@@ -1,11 +1,60 @@
 import { IVilla } from '../../utils/data';
+import styled from 'styled-components';
 import Badge from '../Badge/Badge';
+import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const VillaInfo = (props: { data: IVilla }) => {
   const { data } = props;
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
+  const StyledSlider = styled(Slider)`
+    .slick-arrow {
+      display: none !important;
+    }
+    :hover > .slick-arrow {
+      display: block !important;
+    }
+    .slick-prev:before,
+    .slick-next:before {
+      font-size: 24px;
+    }
+    .slick-prev {
+      left: 5px;
+      z-index: 1;
+      width: 32px;
+      height: 32px;
+      visibility: visible;
+    }
+
+    .slick-next {
+      right: 5px;
+      z-index: 1;
+      width: 32px;
+      height: 32px;
+      visibility: visible;
+    }
+  `;
   return (
     <div className=' border-lg w-[200px] text-black'>
-      <img src={`https://gis-api.pockethost.io/api/files/784ca34x8mjab58/` + data.id + `/` + data.thumbnail} alt={data.name} className='w-full h-[150px]  rounded-md drop-shadow-xl' />
+      {data.photo && (
+        <StyledSlider {...settings}>
+          {data.photo.map((item: any) => (
+            <div key={item.id}>
+              <img src={`https://gis-api.pockethost.io/api/files/dvuh6i6d1rxa2so/` + item.id + `/` + item.path_photo} alt={item.name} className='w-[300px] h-[200px] rounded-xl drop-shadow-xl' />
+            </div>
+          ))}
+        </StyledSlider>
+      )}
       <div className='p-2'>
         <h2 className='text-lg'>{data.name}</h2>
         <p
