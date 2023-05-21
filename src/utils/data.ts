@@ -9,6 +9,7 @@ export interface IVilla {
   photo: any | Array<any>;
   category: any | Array<any>;
   house_rules?: any | Array<any>;
+  room?: any | Array<any>;
   thumbnail: string;
 }
 

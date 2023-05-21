@@ -3,6 +3,8 @@ import { IVilla } from '../../../utils/data';
 import { useState, useEffect } from 'react';
 import { getVillaDetail } from '../../../utils/api';
 import Badge from '../../../components/Badge/Badge';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function VillaDetailPages() {
   // const { data } = props;
@@ -82,10 +84,37 @@ export default function VillaDetailPages() {
               </div>
             </>
           )}
+
+          {/* Room */}
+          {villa.room && (
+            <>
+              <h1 className='text-2xl font-semibold mt-5'>Room</h1>
+              <div className='flex-col gap-2 py-5'>
+                {villa.room.map((item: any) => (
+                  <div key={item.id}>
+                    <h1 className='text-lg'>{item.name}</h1>
+                    <h1 className='text-lg'>{item.bed}</h1>
+                    <p className='text-lg font-semibold mt-2'>
+                      {item.price_per_night.toLocaleString('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                      })}
+                      <span className='font-normal'> /malam</span>
+                    </p>
+                    {/* {item.expand.map((photo: any) => (
+                      <div key={photo.id}> </div>
+                    ))} */}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       ) : (
         <>
-          <p className='font-semibold text-4xl justify-center flex '>Sorry .... Villa Not found</p>
+          <div className='py-5 px-[100px] max-w-[1366px] mx-auto'>
+            <Skeleton height={200} />
+          </div>
         </>
       )}
     </>

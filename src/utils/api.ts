@@ -29,7 +29,7 @@ async function getVillaList(): Promise<IVilla[]> {
 
 async function getVillaDetail(id: any): Promise<IVilla> {
   const record = await pb.collection('villa').getOne(id, {
-    expand: 'villa_photos(villa),category(villa).detail_category,house_rules(villa).house_rules_detail',
+    expand: 'villa_photos(villa),category(villa).detail_category,house_rules(villa).house_rules_detail,room(villa).room_photo(room)',
   });
   console.log('record :>> ', record);
 
@@ -44,7 +44,7 @@ async function getVillaDetail(id: any): Promise<IVilla> {
     photo: record.expand['villa_photos(villa)'],
     category: record.expand['category(villa)'],
     house_rules: record.expand['house_rules(villa)'],
-
+    room: record.expand['room(villa)'],
     thumbnail: record.photo,
   } as IVilla;
 
