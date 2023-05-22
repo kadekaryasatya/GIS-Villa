@@ -48,7 +48,6 @@ async function getVillaDetail(id: any): Promise<IVilla> {
     thumbnail: record.photo,
   } as IVilla;
 
-  // const villas: IVilla = record.map((record: any) => {
   //   return {
   //     id: record.id,
   //     name: record.name,
