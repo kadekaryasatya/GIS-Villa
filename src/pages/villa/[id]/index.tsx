@@ -6,6 +6,8 @@ import Badge from '../../../components/Badge/Badge';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Maps from '../../../components/Map/Map';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBed } from '@fortawesome/free-solid-svg-icons';
 
 export default function VillaDetailPages() {
   // const { data } = props;
@@ -74,9 +76,11 @@ export default function VillaDetailPages() {
                 {villa.house_rules && (
                   <>
                     <h1 className='text-2xl font-semibold mt-5'>House Rules </h1>
-                    <div className='flex-col gap-2 py-5'>
+                    <div className='flex-col gap-2 mb-5 mt-3'>
                       {villa.house_rules.map((item: any) => (
-                        <div key={item.expand.house_rules_detail.id}>{item.allowed ? <h1 className='text-lg'>{item.expand.house_rules_detail.name}</h1> : <h1 className='text-lg line-through'>{item.expand.house_rules_detail.name}</h1>}</div>
+                        <div key={item.expand.house_rules_detail.id} className=' bg-white-50 px-3 bg-white border shadow my-1'>
+                          {item.allowed ? <h1 className='text-lg'>{item.expand.house_rules_detail.name}</h1> : <h1 className='text-lg line-through'>{item.expand.house_rules_detail.name}</h1>}
+                        </div>
                       ))}
                     </div>
                   </>
@@ -87,11 +91,11 @@ export default function VillaDetailPages() {
               <div className='w-1/2 '>
                 {/* Room */}
                 {villa.room && (
-                  <div className='my-5 shadow  px-5 py-2 border rounded-2xl'>
+                  <div className='my-5 shadow-lg  px-5 py-2 border rounded-2xl'>
                     <h1 className='text-lg font-semibold '>Room Available </h1>
                     <div className='flex-col gap-2 py-5 '>
-                      {villa.room.map((item: any) => (
-                        <div key={item.id} className='flex gap-5 mb-2 bg-orange-50 shadow py-2 px-4 rounded-2xl'>
+                      {villa.room.slice(0, 3).map((item: any) => (
+                        <div key={item.id} className='flex gap-5 mb-4 bg-orange-50 shadow py-2 px-4 rounded-2xl'>
                           <div>
                             {item.expand['room_photo(room)'].map((photo: any) => (
                               <img key={photo.id} src={`https://gis-api.pockethost.io/api/files/8vo79sa9oofehjs/` + photo.id + `/` + photo.path_room_photo} alt={item.name} className='w-[200px] h-[150px] rounded-xl shadow' />
@@ -99,8 +103,11 @@ export default function VillaDetailPages() {
                           </div>
                           <div className='flex flex-col justify-between'>
                             <div>
-                              <h1 className='font-semibold'>{item.name}</h1>
-                              <h1 className='font-semibold text-sm'>Bed : {item.bed}</h1>
+                              <h1 className='font-semibold text-lg'>{item.name}</h1>
+                              <div className='flex gap-2 items-center mt-2'>
+                                <FontAwesomeIcon icon={faBed} className='items-center' />
+                                <h1 className='font-semibold text-sm'>Bed : {item.bed}</h1>
+                              </div>
                             </div>
                             <div>
                               <p className='font-semibold  mb-5  text-orange-600 '>
@@ -119,13 +126,21 @@ export default function VillaDetailPages() {
                 )}
               </div>
             </div>
-            <Maps />
+            <div className='mt-5'>
+              <Maps />
+            </div>
           </div>
         </div>
       ) : (
         <>
-          <div className='py-5 px-[100px] max-w-[1366px] mx-auto'>
-            <Skeleton height={200} />
+          <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
+            <div className='flex gap-2 mb-5 '>
+              <Skeleton height={300} width={310} />
+              <Skeleton height={300} width={310} />
+              <Skeleton height={300} width={310} />
+              <Skeleton height={300} width={310} />
+            </div>
+            <Skeleton height={500} className='' />
           </div>
         </>
       )}
