@@ -9,23 +9,11 @@ export interface IVilla {
   photo: any | Array<any>;
   category: any | Array<any>;
   house_rules?: any | Array<any>;
-  room?: Array<IRoom> | any;
+  facilities?: any | Array<any>;
+  room?: any | Array<any>;
   thumbnail: string;
 }
 
-export interface IRoom {
-  id: string;
-  bed: number;
-  name: string;
-  price_per_night: number;
-  photo: Array<IRoomPhoto>;
-}
-
-export interface IRoomPhoto {
-  id: string;
-  path_room_photo: string;
-}
-// export const ListVilla: IVilla[] = [
 //   {
 //     id: '1',
 //     name: 'Villa Cyan',

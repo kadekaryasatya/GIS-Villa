@@ -7,7 +7,8 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Maps from '../../../components/Map/Map';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed } from '@fortawesome/free-solid-svg-icons';
+import BoxInfo from '../../../components/BoxInfo/BoxInfo';
 
 export default function VillaDetailPages() {
   // const { data } = props;
@@ -95,7 +96,7 @@ export default function VillaDetailPages() {
                     <h1 className='text-lg font-semibold '>Room Available </h1>
                     <div className='flex-col gap-2 py-5 '>
                       {villa.room.slice(0, 3).map((item: any) => (
-                        <div key={item.id} className='flex gap-5 mb-4 bg-orange-50 shadow py-2 px-4 rounded-2xl'>
+                        <div key={item.id} className='flex gap-5 mb-4 bg-orange-50 shadow py-2 px-4 rounded-2xl border'>
                           <div>
                             {item.expand['room_photo(room)'].map((photo: any) => (
                               <img key={photo.id} src={`https://gis-api.pockethost.io/api/files/8vo79sa9oofehjs/` + photo.id + `/` + photo.path_room_photo} alt={item.name} className='w-[200px] h-[150px] rounded-xl shadow' />
@@ -107,6 +108,10 @@ export default function VillaDetailPages() {
                               <div className='flex gap-2 items-center mt-2'>
                                 <FontAwesomeIcon icon={faBed} className='items-center' />
                                 <h1 className='font-semibold text-sm'>Bed : {item.bed}</h1>
+                              </div>
+                              <div className='flex gap-2 items-center mt-2'>
+                                <FontAwesomeIcon icon={faBath} className='items-center' />
+                                <h1 className='font-semibold text-sm'>Bathroom : {item.bath}</h1>
                               </div>
                             </div>
                             <div>
@@ -126,6 +131,20 @@ export default function VillaDetailPages() {
                 )}
               </div>
             </div>
+
+            {/* Facilities */}
+            {villa.facilities && (
+              <>
+                <h1 className='text-2xl font-semibold mt-5'>Facilties </h1>
+                <div className='flex gap-2 mb-5 mt-3'>
+                  {villa.facilities.map((item: any) => (
+                    <div key={item.expand.facilities_name.id} className=''>
+                      <BoxInfo name={item.expand.facilities_name.name}></BoxInfo>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
             <div className='mt-5'>
               <Maps />
             </div>
