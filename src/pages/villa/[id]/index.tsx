@@ -135,7 +135,7 @@ export default function VillaDetailPages() {
             {/* Facilities */}
             {villa.facilities && (
               <>
-                <h1 className='text-2xl font-semibold mt-5'>Facilties </h1>
+                <h1 className='text-2xl font-semibold mt-5'>Facilities </h1>
                 <div className='flex gap-2 mb-5 mt-3'>
                   {villa.facilities.map((item: any) => (
                     <div key={item.expand.facilities_name.id} className=''>
