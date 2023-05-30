@@ -1,5 +1,5 @@
 import PocketBase from 'pocketbase';
-import { IVilla } from '../utils/data';
+import { ICategory, IFacilities, IHouseRules, IVilla } from '../utils/data';
 
 const pb = new PocketBase('https://gis-api.pockethost.io');
 
@@ -22,7 +22,6 @@ async function getVillaList(): Promise<IVilla[]> {
       thumbnail: record.photo,
     };
   });
-  console.log('villas :>> ', villas);
 
   return villas;
 }
@@ -49,20 +48,64 @@ async function getVillaDetail(id: any): Promise<IVilla> {
     thumbnail: record.photo,
   } as IVilla;
 
-  //   return {
-  //     id: record.id,
-  //     name: record.name,
-  //     description: record.description,
-  //     location: record.location,
-  //     price: record.price,
-  //     lat: record.latitude,
-  //     lng: record.longitude,
-  //     photo: record.expand['villa_photos(villa'],
-  //     thumbnail: record.photo,
-  //   };
-  // });
-  console.log('villa :>> ', villa);
   return villa;
 }
 
-export { getVillaList, getVillaDetail };
+async function postVillaDetail(name: string, description: string, latitude: number, longitude: number) {
+  const villa = {
+    name: name,
+    description: description,
+    latitude: latitude,
+    longitude: longitude,
+  };
+
+  await pb.collection('villa').create(villa, {
+    expand: 'category(villa).detail_category',
+  });
+
+  return villa;
+}
+
+async function getCategoryList(): Promise<ICategory[]> {
+  const records = await pb.collection('detail_category').getFullList({
+    sort: '-created',
+  });
+  const category: ICategory[] = records.map((record) => {
+    return {
+      id: record.id,
+      name: record.name,
+    };
+  });
+
+  return category;
+}
+
+async function getHouseRulesList(): Promise<IHouseRules[]> {
+  const records = await pb.collection('house_rules_detail').getFullList({
+    sort: '-created',
+  });
+  const house_rules: IHouseRules[] = records.map((record) => {
+    return {
+      id: record.id,
+      name: record.name,
+    };
+  });
+
+  return house_rules;
+}
+
+async function getFacilitiesList(): Promise<IFacilities[]> {
+  const records = await pb.collection('facilities_name').getFullList({
+    sort: '-created',
+  });
+  const house_rules: IFacilities[] = records.map((record) => {
+    return {
+      id: record.id,
+      name: record.name,
+    };
+  });
+
+  return house_rules;
+}
+
+export { getVillaList, getVillaDetail, postVillaDetail, getCategoryList, getHouseRulesList, getFacilitiesList };

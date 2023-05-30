@@ -34,7 +34,7 @@ export default function Maps() {
   return (
     <>
       <div className=''>
-        <MapContainer center={[-8.6828693, 115.2004822]} zoom={13}>
+        <MapContainer center={[-8.6828693, 115.2004822]} zoom={13} style={{ height: '90vh', width: '100%' }}>
           <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors" />
           {markerData.map((villa: IVilla) => (
             <Marker key={villa.id} position={[villa.lat, villa.lng]} icon={locationIcon}>
