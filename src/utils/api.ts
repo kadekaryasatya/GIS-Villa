@@ -66,6 +66,17 @@ async function postVillaDetail(name: string, description: string, latitude: numb
   return villa;
 }
 
+async function postCategoryVilla(id_villa: number, detail_category: number) {
+  const data = {
+    id_villa,
+    detail_category,
+  };
+
+  await pb.collection('category').create(data);
+
+  return data;
+}
+
 async function getCategoryList(): Promise<ICategory[]> {
   const records = await pb.collection('detail_category').getFullList({
     sort: '-created',
@@ -108,4 +119,4 @@ async function getFacilitiesList(): Promise<IFacilities[]> {
   return house_rules;
 }
 
-export { getVillaList, getVillaDetail, postVillaDetail, getCategoryList, getHouseRulesList, getFacilitiesList };
+export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList };

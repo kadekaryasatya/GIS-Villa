@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getCategoryList, getFacilitiesList, getHouseRulesList, postVillaDetail } from '../../utils/api';
+import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVilla, postVillaDetail } from '../../utils/api';
 import MapComponent from '../../components/Map/Maps';
 import { ICategory, IFacilities, IHouseRules } from '../../utils/data';
+import { toast } from 'react-toastify';
 
 function CreateVilla() {
   const [name, setName] = useState('');
@@ -11,6 +12,7 @@ function CreateVilla() {
   const [categoryList, setCategoryList] = useState<Array<ICategory>>([]);
   const [houseRulesList, setHouseRulesList] = useState<Array<IHouseRules>>([]);
   const [facilitiesList, setFacilitiesList] = useState<Array<IFacilities>>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const handleLocationSelected = (lat: number, lng: number) => {
     setLatitude(lat);
@@ -18,8 +20,25 @@ function CreateVilla() {
   };
 
   const handleSubmit = () => {
-    postVillaDetail(name, description, latitude, longitude);
+    const create = async () => {
+      try {
+        postVillaDetail(name, description, latitude, longitude);
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+
+      // try {
+      //   postCategoryVilla(villa, selectedCategories);
+      // } catch (error: any) {
+      //   toast.error(error.message);
+      // }
+    };
+    toast.promise(create(), {
+      pending: 'Loading..',
+    });
   };
+
+  console.log('selectedCategories :>> ', selectedCategories);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,6 +63,19 @@ function CreateVilla() {
     }
     fetchData();
   }, []);
+
+  const handleCategoryChange = (value: string) => {
+    const updatedCategories = [...selectedCategories];
+
+    if (updatedCategories.includes(value)) {
+      const index = updatedCategories.indexOf(value);
+      updatedCategories.splice(index, 1);
+    } else {
+      updatedCategories.push(value);
+    }
+
+    setSelectedCategories(updatedCategories);
+  };
 
   return (
     <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
@@ -84,6 +116,8 @@ function CreateVilla() {
                   id={item.id}
                   type='checkbox'
                   value={item.name}
+                  checked={selectedCategories.includes(item.name)}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
                   className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300  dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
                 ></input>
               </div>
