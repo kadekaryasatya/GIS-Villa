@@ -59,18 +59,30 @@ async function postVillaDetail(name: string, description: string, latitude: numb
     longitude: longitude,
   };
 
-  await pb.collection('villa').create(villa, {
-    expand: 'category(villa).detail_category',
-  });
+  const createdVilla = await pb.collection('villa').create(villa);
 
-  return villa;
+  const id_villa = {
+    id: createdVilla.id,
+  };
+
+  return id_villa;
 }
 
-async function postCategoryVilla(id_villa: number, detail_category: number) {
+async function deleteVilla(id: string) {
+  let confirm = window.confirm('Are you sure delete this ?');
+  if (!confirm) {
+    return;
+  }
+  await pb.collection('villa').delete(id);
+  window.location.reload();
+}
+
+async function postCategoryVilla(idVilla: string, selectedCategories: any) {
   const data = {
-    id_villa,
-    detail_category,
+    villa: idVilla,
+    detail_category: selectedCategories,
   };
+  console.log('data :>> ', data);
 
   await pb.collection('category').create(data);
 
@@ -119,4 +131,4 @@ async function getFacilitiesList(): Promise<IFacilities[]> {
   return house_rules;
 }
 
-export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList };
+export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla };

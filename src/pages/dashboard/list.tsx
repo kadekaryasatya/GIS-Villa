@@ -1,5 +1,5 @@
 import React from 'react';
-import { getVillaList } from '../../utils/api';
+import { deleteVilla, getVillaList } from '../../utils/api';
 import { useEffect, useState } from 'react';
 import { IVilla } from '../../utils/data';
 
@@ -15,7 +15,7 @@ function Listing(): JSX.Element {
   }, []);
   return (
     <div>
-      <div className='relative overflow-x-auto shadow-md sm:rounded-lg py-5 px-[50px] max-w-[1366px] mx-auto'>
+      <div className='relative overflow-x-auto shadow-md sm:rounded-lg py-5 px-[50px] max-w-[1366px] mx-auto mt-5'>
         <div className='flex justify-between mb-5'>
           <h1 className='text-2xl font-semibold '>Your Listings</h1>
           <a
@@ -59,9 +59,9 @@ function Listing(): JSX.Element {
                   <a href={`/villa/${item.id}`} key={item.id} className='font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2 '>
                     Edit
                   </a>
-                  <a href='#' className='font-medium text-red-600  hover:underline'>
+                  <button className='font-medium text-red-600  hover:underline' onClick={() => deleteVilla(item.id)}>
                     Delete
-                  </a>
+                  </button>
                 </td>
               </tr>
             ))}

@@ -19,26 +19,30 @@ function CreateVilla() {
     setLongitude(lng);
   };
 
-  const handleSubmit = () => {
-    const create = async () => {
-      try {
-        postVillaDetail(name, description, latitude, longitude);
-      } catch (error: any) {
-        toast.error(error.message);
+  const store = async (idVilla: any) => {
+    try {
+      for (const category of selectedCategories) {
+        await postCategoryVilla(idVilla, category);
       }
-
-      // try {
-      //   postCategoryVilla(villa, selectedCategories);
-      // } catch (error: any) {
-      //   toast.error(error.message);
-      // }
-    };
-    toast.promise(create(), {
-      pending: 'Loading..',
-    });
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   console.log('selectedCategories :>> ', selectedCategories);
+
+  const handleSubmit = () => {
+    const create = async () => {
+      try {
+        const createdVilla = await postVillaDetail(name, description, latitude, longitude);
+        const id_villa = createdVilla.id;
+        store(id_villa);
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    };
+    create();
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -115,8 +119,8 @@ function CreateVilla() {
                 <input
                   id={item.id}
                   type='checkbox'
-                  value={item.name}
-                  checked={selectedCategories.includes(item.name)}
+                  value={item.id}
+                  checked={selectedCategories.includes(item.id)}
                   onChange={(e) => handleCategoryChange(e.target.value)}
                   className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300  dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
                 ></input>
@@ -147,7 +151,7 @@ function CreateVilla() {
                 <input
                   id={item.id}
                   type='checkbox'
-                  value={item.name}
+                  value={item.id}
                   className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300  dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
                 ></input>
               </div>
