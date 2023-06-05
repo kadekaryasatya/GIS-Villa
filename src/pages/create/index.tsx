@@ -3,6 +3,7 @@ import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVill
 import MapComponent from '../../components/Map/Maps';
 import { ICategory, IFacilities, IHouseRules } from '../../utils/data';
 import { toast } from 'react-toastify';
+const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu']; // Example city data
 
 function CreateVilla() {
   const [name, setName] = useState('');
@@ -13,6 +14,9 @@ function CreateVilla() {
   const [houseRulesList, setHouseRulesList] = useState<Array<IHouseRules>>([]);
   const [facilitiesList, setFacilitiesList] = useState<Array<IFacilities>>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedRules, setSelectedRules] = useState<string[]>([]);
+  const [allowed, setAllowed] = useState(false);
 
   const handleLocationSelected = (lat: number, lng: number) => {
     setLatitude(lat);
@@ -34,7 +38,7 @@ function CreateVilla() {
   const handleSubmit = () => {
     const create = async () => {
       try {
-        const createdVilla = await postVillaDetail(name, description, latitude, longitude);
+        const createdVilla = await postVillaDetail(name, description, latitude, longitude, selectedCity);
         const id_villa = createdVilla.id;
         store(id_villa);
       } catch (error: any) {
@@ -81,6 +85,21 @@ function CreateVilla() {
     setSelectedCategories(updatedCategories);
   };
 
+  const handleCityChange = (event: any) => {
+    setSelectedCity(event.target.value);
+  };
+
+  const handleRuleChange = (event: any) => {
+    const ruleId = event.target.value;
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      setSelectedRules((prevRules) => [...prevRules, ruleId]);
+    } else {
+      setSelectedRules((prevRules) => prevRules.filter((rule) => rule !== ruleId));
+    }
+  };
+
   return (
     <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
       <h1 className='font-semibold text-2xl  '>Tell us about your Villa</h1>
@@ -100,14 +119,27 @@ function CreateVilla() {
 
         {/* Location */}
         <div className='mb-6'>
-          <label className='block mb-2 text-lg font-medium text-gray-900 '>Location</label>
-          <input
-            type='text'
-            id='location'
-            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
-            required
-          ></input>
+          <div>
+            <label htmlFor='city' className='block mb-2 text-lg font-medium text-gray-900'>
+              Select City
+            </label>
+            <select
+              id='city'
+              name='city'
+              value={selectedCity}
+              onChange={handleCityChange}
+              className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+            >
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+
+        {/* Location on Map */}
         <MapComponent onLocationSelected={handleLocationSelected} />
 
         {/* Category */}
@@ -149,6 +181,7 @@ function CreateVilla() {
             <div className='flex mb-2' key={item.id}>
               <div className='flex items-center h-5'>
                 <input
+                  onChange={handleRuleChange}
                   id={item.id}
                   type='checkbox'
                   value={item.id}

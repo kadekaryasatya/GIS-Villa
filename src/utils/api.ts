@@ -51,12 +51,13 @@ async function getVillaDetail(id: any): Promise<IVilla> {
   return villa;
 }
 
-async function postVillaDetail(name: string, description: string, latitude: number, longitude: number) {
+async function postVillaDetail(name: string, description: string, latitude: number, longitude: number, location: string) {
   const villa = {
     name: name,
     description: description,
     latitude: latitude,
     longitude: longitude,
+    location: location,
   };
 
   const createdVilla = await pb.collection('villa').create(villa);
@@ -82,7 +83,18 @@ async function postCategoryVilla(idVilla: string, selectedCategories: any) {
     villa: idVilla,
     detail_category: selectedCategories,
   };
-  console.log('data :>> ', data);
+
+  await pb.collection('category').create(data);
+
+  return data;
+}
+
+async function postHouseRules(idVilla: string, selectedRules: any, allowed: boolean) {
+  const data = {
+    villa: idVilla,
+    detail_category: selectedRules,
+    allowed: allowed,
+  };
 
   await pb.collection('category').create(data);
 
@@ -131,4 +143,4 @@ async function getFacilitiesList(): Promise<IFacilities[]> {
   return house_rules;
 }
 
-export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla };
+export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla, postHouseRules };
