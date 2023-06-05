@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVilla, postVillaDetail } from '../../utils/api';
+import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVilla, postFacilitiesVilla, postHouseRules, postVillaDetail } from '../../utils/api';
 import MapComponent from '../../components/Map/Maps';
 import { ICategory, IFacilities, IHouseRules } from '../../utils/data';
 import { toast } from 'react-toastify';
@@ -16,7 +16,7 @@ function CreateVilla() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedRules, setSelectedRules] = useState<string[]>([]);
-  const [allowed, setAllowed] = useState(false);
+  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
 
   const handleLocationSelected = (lat: number, lng: number) => {
     setLatitude(lat);
@@ -31,9 +31,27 @@ function CreateVilla() {
     } catch (error: any) {
       toast.error(error.message);
     }
-  };
 
-  console.log('selectedCategories :>> ', selectedCategories);
+    try {
+      const allRules = houseRulesList.map((item) => item.id);
+      const selectedRulesSet = new Set(selectedRules);
+
+      for (const ruleId of allRules) {
+        const allowed = selectedRulesSet.has(ruleId);
+        await postHouseRules(idVilla, ruleId, allowed);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+
+    try {
+      for (const facilities of selectedFacilities) {
+        await postFacilitiesVilla(idVilla, facilities);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   const handleSubmit = () => {
     const create = async () => {
@@ -89,17 +107,33 @@ function CreateVilla() {
     setSelectedCity(event.target.value);
   };
 
-  const handleRuleChange = (event: any) => {
-    const ruleId = event.target.value;
-    const isChecked = event.target.checked;
+  const handleRuleChange = (value: any) => {
+    const updatedRules = [...selectedRules];
 
-    if (isChecked) {
-      setSelectedRules((prevRules) => [...prevRules, ruleId]);
+    if (updatedRules.includes(value)) {
+      const index = updatedRules.indexOf(value);
+      updatedRules.splice(index, 1);
     } else {
-      setSelectedRules((prevRules) => prevRules.filter((rule) => rule !== ruleId));
+      updatedRules.push(value);
     }
+
+    setSelectedRules(updatedRules);
   };
 
+  const handleFacilitiesChange = (value: string) => {
+    const updatedFacilities = [...selectedFacilities];
+
+    if (updatedFacilities.includes(value)) {
+      const index = updatedFacilities.indexOf(value);
+      updatedFacilities.splice(index, 1);
+    } else {
+      updatedFacilities.push(value);
+    }
+
+    setSelectedFacilities(updatedFacilities);
+  };
+
+  console.log('selectedFacilities :>> ', selectedFacilities);
   return (
     <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
       <h1 className='font-semibold text-2xl  '>Tell us about your Villa</h1>
@@ -130,6 +164,7 @@ function CreateVilla() {
               onChange={handleCityChange}
               className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
             >
+              <option value=''>-- Select a city --</option>
               {cities.map((city) => (
                 <option key={city} value={city}>
                   {city}
@@ -181,10 +216,11 @@ function CreateVilla() {
             <div className='flex mb-2' key={item.id}>
               <div className='flex items-center h-5'>
                 <input
-                  onChange={handleRuleChange}
+                  onChange={(e) => handleRuleChange(e.target.value)}
                   id={item.id}
                   type='checkbox'
                   value={item.id}
+                  checked={selectedRules.includes(item.id)}
                   className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300  dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
                 ></input>
               </div>
@@ -200,9 +236,11 @@ function CreateVilla() {
             <div className='flex mb-2' key={item.id}>
               <div className='flex items-center h-5'>
                 <input
+                  onChange={(e) => handleFacilitiesChange(e.target.value)}
+                  checked={selectedFacilities.includes(item.id)}
                   id={item.id}
                   type='checkbox'
-                  value={item.name}
+                  value={item.id}
                   className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300  dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
                 ></input>
               </div>
