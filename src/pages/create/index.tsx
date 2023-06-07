@@ -3,7 +3,7 @@ import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVill
 import MapComponent from '../../components/Map/Maps';
 import { ICategory, IFacilities, IHouseRules } from '../../utils/data';
 import { toast } from 'react-toastify';
-const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu']; // Example city data
+const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu                                                                                                         ']; // Example city data
 
 function CreateVilla() {
   const [name, setName] = useState('');
