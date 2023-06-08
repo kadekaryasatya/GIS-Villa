@@ -112,19 +112,16 @@ async function postFacilitiesVilla(idVilla: string, selectedFacilities: any) {
   return data;
 }
 
-async function postPhotoVilla(idVilla: string, photos: any) {
+const postPhotoVilla = async (idVilla: string, file: File) => {
   const formData = new FormData();
 
-  formData.append('villa', idVilla.toString());
-
-  for (let file of photos) {
-    formData.append('path_photo', file);
-  }
+  formData.append('villa', idVilla);
+  formData.append('path_photo', file);
 
   await pb.collection('villa_photos').create(formData);
 
   return formData;
-}
+};
 
 async function getCategoryList(): Promise<ICategory[]> {
   const records = await pb.collection('detail_category').getFullList({
@@ -168,4 +165,22 @@ async function getFacilitiesList(): Promise<IFacilities[]> {
   return house_rules;
 }
 
-export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla, postHouseRules, postFacilitiesVilla, postPhotoVilla };
+async function postRoomDetail(name: string, idVilla: string, bed: number, bath: number, price: number) {
+  const room = {
+    name: name,
+    villa: idVilla,
+    bed: bed,
+    bath: bath,
+    price_per_night: price,
+  };
+
+  const createdRoom = await pb.collection('room').create(room);
+
+  const id_room = {
+    id: createdRoom.id,
+  };
+
+  return id_room;
+}
+
+export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla, postHouseRules, postFacilitiesVilla, postPhotoVilla, postRoomDetail };

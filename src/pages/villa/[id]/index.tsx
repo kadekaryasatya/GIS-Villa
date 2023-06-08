@@ -41,67 +41,60 @@ export default function VillaDetailPages() {
     <>
       {villa ? (
         <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
-          {/* Photo */}
-          {villa.photo && (
-            <div className='container shadow-lg bg-white-50 py-5 px-5 mb-5 '>
+          <div className='container shadow-lg bg-white-50 py-5 px-5 mb-5 '>
+            {/* Name and Location */}
+            <div className='flex justify-between '>
+              <h1 className='text-4xl font-semibold '>{villa.name}</h1>
+            </div>
+            <div className='flex gap-1 items-center mb-3 mt-2'>
+              <img src='/icons/location.png' alt='location' className='h-4 cursor-pointer' />
+              <p className='text-orange-500'>{villa.location}</p>
+            </div>
+            {/* Category */}
+            {villa.category && (
+              <>
+                <div className='flex gap-2 mb-5'>
+                  {villa.category.map((item: any) => (
+                    <div key={item.expand.detail_category.id}>
+                      <Badge name={item.expand.detail_category.name} />
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+            {/* Photo */}
+            {villa.photo && (
               <div className='-m-1 flex flex-wrap md:-m-2'>
                 <div className='flex w-1/2 flex-wrap'>
-                  <div className='w-1/2 p-1 md:p-2'>
+                  <div className='w-1/2 p-1 md:p-2 h-[200px]'>
                     <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[0]} />
                   </div>
-                  <div className='w-1/2 p-1 md:p-2'>
+                  <div className='w-1/2 p-1 md:p-2 h-[200px]'>
                     <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[1] ? imageUrls[1] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp'} />
                   </div>
-                  <div className='w-full h-[300px] p-1 md:p-2'>
+                  <div className='w-full h-[250px] p-1 md:p-2'>
                     <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[2] ? imageUrls[2] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(74).webp'} />
                   </div>
                 </div>
                 <div className='flex w-1/2 flex-wrap'>
-                  <div className='w-full h-[300px] p-1 md:p-2'>
+                  <div className='w-full h-[250px] p-1 md:p-2'>
                     <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[3] ? imageUrls[3] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(76).webp'} />
                   </div>
-                  <div className='w-1/2 p-1 md:p-2'>
+                  <div className='w-1/2 p-1 md:p-2 h-[200px]'>
                     <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[4] ? imageUrls[4] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(75).webp'} />
                   </div>
-                  <div className='w-1/2 p-1 md:p-2'>
+                  <div className='w-1/2 p-1 md:p-2 h-[200px]'>
                     <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[5] ? imageUrls[5] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(77).webp'} />
                   </div>
                 </div>
               </div>
-            </div>
-            // <div className='py-2 grid grid-cols-4 gap-1 shadow-lg bg-white-50 px-5 mb-5 '>
-            //   {/* {villa.photo.map((item: any) => ( */}
-            //   {imageUrls.length > 0 && <img className='h-auto max-w-full rounded-lg' src={imageUrls[0]} alt='' />}
-            //   {/* ))} */}
-            // </div>
-          )}
+            )}
+          </div>
 
           <div className='shadow-2xl bg-white-50 px-5 drop-shadow-2xl bg-white'>
             <div className='flex gap-10 '>
               {/* Left Content */}
               <div className='w-1/2'>
-                {/* Name and Price */}
-                <div className='flex justify-between mt-5'>
-                  <h1 className='text-4xl font-semibold '>{villa.name}</h1>
-                </div>
-                <div className='flex gap-1 items-center mb-5 mt-2'>
-                  <img src='/icons/location.png' alt='location' className='h-4 cursor-pointer' />
-                  <p className='text-orange-500'>{villa.location}</p>
-                </div>
-
-                {/* Category */}
-                {villa.category && (
-                  <>
-                    <div className='flex gap-2 '>
-                      {villa.category.map((item: any) => (
-                        <div key={item.expand.detail_category.id}>
-                          <Badge name={item.expand.detail_category.name} />
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-
                 {/* Description */}
                 <>
                   <h1 className='text-2xl font-semibold mt-5'>Description</h1>
@@ -133,7 +126,7 @@ export default function VillaDetailPages() {
                       {villa.room.slice(0, 3).map((item: any) => (
                         <div key={item.id} className='flex gap-5 mb-4 bg-orange-50 shadow py-2 px-4 rounded-2xl border'>
                           <div>
-                            {item.expand['room_photo(room)'].map((photo: any) => (
+                            {item.expand['room_photo(room)']?.map((photo: any) => (
                               <img key={photo.id} src={`https://gis-api.pockethost.io/api/files/8vo79sa9oofehjs/` + photo.id + `/` + photo.path_room_photo} alt={item.name} className='w-[200px] h-[150px] rounded-xl shadow' />
                             ))}
                           </div>
@@ -187,12 +180,7 @@ export default function VillaDetailPages() {
       ) : (
         <>
           <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
-            <div className='flex gap-2 mb-5 '>
-              <Skeleton height={300} width={310} />
-              <Skeleton height={300} width={310} />
-              <Skeleton height={300} width={310} />
-              <Skeleton height={300} width={310} />
-            </div>
+            <Skeleton height={400} className='mb-5' />
             <Skeleton height={500} className='' />
           </div>
         </>

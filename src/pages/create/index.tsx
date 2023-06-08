@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVilla, postFacilitiesVilla, postHouseRules, postPhotoVilla, postVillaDetail } from '../../utils/api';
+import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVilla, postFacilitiesVilla, postHouseRules, postPhotoVilla, postRoomDetail, postVillaDetail } from '../../utils/api';
 import MapComponent from '../../components/Map/Maps';
 import { ICategory, IFacilities, IHouseRules } from '../../utils/data';
 import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import PocketBase from 'pocketbase';
-
 const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu']; // Example city data
-const pb = new PocketBase('https://gis-api.pockethost.io');
 
 interface Photo {
   file: File;
@@ -30,18 +27,19 @@ function CreateVilla() {
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
   // const [selectedFile, setSelectedFile] = useState<File[]>([]);
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [roomName, setRoomName] = useState('');
+  const [bed, setBed] = useState(0);
+  const [bath, setBath] = useState(0);
+  const [price, setPrice] = useState(0);
 
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      const newPhotos: Photo[] = acceptedFiles.map((file) => ({
-        file,
-        preview: URL.createObjectURL(file),
-      }));
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const newPhotos: Photo[] = acceptedFiles.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
 
-      setPhotos([...photos, ...newPhotos.slice(0, 6 - photos.length)]);
-    },
-    [photos]
-  );
+    setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos].slice(0, 6));
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -110,8 +108,14 @@ function CreateVilla() {
 
     try {
       for (const villa_photos of photos) {
-        await postPhotoVilla(idVilla, villa_photos);
+        await postPhotoVilla(idVilla, villa_photos.file);
       }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+
+    try {
+      await postRoomDetail(roomName, idVilla, bed, bath, price);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -196,10 +200,6 @@ function CreateVilla() {
 
     setSelectedFacilities(updatedFacilities);
   };
-
-  console.log('selectedFacilities :>> ', selectedFacilities);
-
-  console.log('photos :>> ', photos);
 
   return (
     <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
@@ -331,8 +331,9 @@ function CreateVilla() {
           <div>
             <label className='text-sm  text-gray-900 mr-2'>Room name</label>
             <input
+              onChange={(e) => setRoomName(e.target.value)}
               type='text'
-              id='name'
+              id='roomName'
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder='Example : Double Standard'
               required
@@ -342,8 +343,9 @@ function CreateVilla() {
             <div className='w-full'>
               <label className='text-sm  text-gray-900 mr-2'>Bed</label>
               <input
+                onChange={(e) => setBed(parseInt(e.target.value))}
                 type='number'
-                id='name'
+                id='roomBed'
                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
                 required
               ></input>
@@ -351,8 +353,9 @@ function CreateVilla() {
             <div className='w-full'>
               <label className='text-sm  text-gray-900 mr-2'>Bathroom</label>
               <input
+                onChange={(e) => setBath(parseInt(e.target.value))}
                 type='number'
-                id='name'
+                id='roomBath'
                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
                 required
               ></input>
@@ -362,8 +365,9 @@ function CreateVilla() {
           <div>
             <label className='text-sm  text-gray-900 mr-2'>Price</label>
             <input
+              onChange={(e) => setPrice(parseInt(e.target.value))}
               type='number'
-              id='name'
+              id='roomPrice'
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder='Example : 275000'
               required
