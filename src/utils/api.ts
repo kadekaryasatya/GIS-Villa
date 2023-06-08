@@ -70,12 +70,7 @@ async function postVillaDetail(name: string, description: string, latitude: numb
 }
 
 async function deleteVilla(id: string) {
-  let confirm = window.confirm('Are you sure delete this ?');
-  if (!confirm) {
-    return;
-  }
   await pb.collection('villa').delete(id);
-  window.location.reload();
 }
 
 async function postCategoryVilla(idVilla: string, selectedCategories: any) {

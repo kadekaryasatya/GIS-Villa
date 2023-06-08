@@ -15,33 +15,6 @@ const VillaInfo = (props: { data: IVilla }) => {
     slidesToScroll: 1,
   };
 
-  // const StyledSlider = styled(Slider)`
-  //   .slick-arrow {
-  //     display: none !important;
-  //   }
-  //   :hover > .slick-arrow {
-  //     display: block !important;
-  //   }
-  //   .slick-prev:before,
-  //   .slick-next:before {
-  //     font-size: 24px;
-  //   }
-  //   .slick-prev {
-  //     left: 5px;
-  //     z-index: 1;
-  //     width: 32px;
-  //     height: 32px;
-  //     visibility: visible;
-  //   }
-
-  //   .slick-next {
-  //     right: 5px;
-  //     z-index: 1;
-  //     width: 32px;
-  //     height: 32px;
-  //     visibility: visible;
-  //   }
-  // `;
   return (
     <div className=' border-lg w-[200px] text-black'>
       {data.photo && (

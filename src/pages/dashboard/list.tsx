@@ -1,10 +1,35 @@
-import React from 'react';
 import { deleteVilla, getVillaList } from '../../utils/api';
 import { useEffect, useState } from 'react';
 import { IVilla } from '../../utils/data';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 function Listing(): JSX.Element {
   const [villaList, setVillaList] = useState<Array<IVilla>>([]);
+
+  const MySwal = withReactContent(Swal);
+
+  const handleDelete = (id: string) => {
+    MySwal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteVilla(id);
+          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          setVillaList((prevVillas) => prevVillas.filter((villa) => villa.id !== id));
+        } catch (error) {
+          Swal.fire('Error', 'An error occurred while deleting the file.', 'error');
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -59,7 +84,7 @@ function Listing(): JSX.Element {
                   <a href={`/villa/${item.id}`} key={item.id} className='font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2 '>
                     Edit
                   </a>
-                  <button className='font-medium text-red-600  hover:underline' onClick={() => deleteVilla(item.id)}>
+                  <button className='font-medium text-red-600  hover:underline' onClick={() => handleDelete(item.id)}>
                     Delete
                   </button>
                 </td>

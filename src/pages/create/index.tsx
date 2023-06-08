@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVilla, postFacilitiesVilla, postHouseRules, postPhotoVilla, postRoomDetail, postVillaDetail } from '../../utils/api';
 import MapComponent from '../../components/Map/Maps';
 import { ICategory, IFacilities, IHouseRules } from '../../utils/data';
-import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { toast, Toaster } from 'react-hot-toast';
 const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu']; // Example city data
 
 interface Photo {
@@ -25,12 +25,13 @@ function CreateVilla() {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedRules, setSelectedRules] = useState<string[]>([]);
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
-  // const [selectedFile, setSelectedFile] = useState<File[]>([]);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [roomName, setRoomName] = useState('');
   const [bed, setBed] = useState(0);
   const [bath, setBath] = useState(0);
   const [price, setPrice] = useState(0);
+
+  <Toaster position='top-right' reverseOrder={false} />;
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newPhotos: Photo[] = acceptedFiles.map((file) => ({
@@ -121,17 +122,32 @@ function CreateVilla() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     const create = async () => {
       try {
         const createdVilla = await postVillaDetail(name, description, latitude, longitude, selectedCity);
         const id_villa = createdVilla.id;
-        store(id_villa);
+        await store(id_villa);
       } catch (error: any) {
         toast.error(error.message);
       }
     };
-    create();
+    const save = create();
+    toast.promise(save, {
+      loading: 'Saving your villa',
+      success: 'Successfuly create villa',
+      error: 'Error when saving',
+    });
+
+    setName('');
+    setDescription('');
+    setLatitude(0);
+    setLongitude(0);
+    setSelectedCity('');
+    setSelectedCategories(['']);
+    setSelectedFacilities(['']);
+    setSelectedRules(['']);
   };
 
   useEffect(() => {
@@ -203,6 +219,7 @@ function CreateVilla() {
 
   return (
     <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
+      <Toaster />
       <h1 className='font-semibold text-2xl  '>Tell us about your Villa</h1>
       <form>
         {/* Villa Name */}
