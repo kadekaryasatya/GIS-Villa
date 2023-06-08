@@ -112,6 +112,20 @@ async function postFacilitiesVilla(idVilla: string, selectedFacilities: any) {
   return data;
 }
 
+async function postPhotoVilla(idVilla: string, photos: any) {
+  const formData = new FormData();
+
+  formData.append('villa', idVilla.toString());
+
+  for (let file of photos) {
+    formData.append('path_photo', file);
+  }
+
+  await pb.collection('villa_photos').create(formData);
+
+  return formData;
+}
+
 async function getCategoryList(): Promise<ICategory[]> {
   const records = await pb.collection('detail_category').getFullList({
     sort: '-created',
@@ -154,4 +168,4 @@ async function getFacilitiesList(): Promise<IFacilities[]> {
   return house_rules;
 }
 
-export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla, postHouseRules, postFacilitiesVilla };
+export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla, postHouseRules, postFacilitiesVilla, postPhotoVilla };

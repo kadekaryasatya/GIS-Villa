@@ -17,6 +17,7 @@ export default function VillaDetailPages() {
   // const villa = data.find((l) => l.id === (id || ''));
 
   const [villa, setVilla] = useState<IVilla | null>(null);
+  const [imageUrls, setImageUrls] = useState([]);
 
   useEffect(() => {
     const fetchVilla = async () => {
@@ -28,17 +29,51 @@ export default function VillaDetailPages() {
     fetchVilla();
   }, [id]);
 
+  useEffect(() => {
+    // Extract the image URLs from the villa object and update the state
+    if (villa && villa.photo) {
+      const urls = villa.photo.map((item: any) => `https://gis-api.pockethost.io/api/files/dvuh6i6d1rxa2so/${item.id}/${item.path_photo}`);
+      setImageUrls(urls);
+    }
+  }, [villa]);
+
   return (
     <>
       {villa ? (
         <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
           {/* Photo */}
           {villa.photo && (
-            <div className='py-2 grid grid-cols-4 gap-1 shadow-lg bg-white-50 px-5 mb-5 '>
-              {villa.photo.map((item: any) => (
-                <img key={item.id} src={`https://gis-api.pockethost.io/api/files/dvuh6i6d1rxa2so/` + item.id + `/` + item.path_photo} alt={item.name} className='w-[300px] h-[300px] rounded-xl drop-shadow-xl' />
-              ))}
+            <div className='container shadow-lg bg-white-50 py-5 px-5 mb-5 '>
+              <div className='-m-1 flex flex-wrap md:-m-2'>
+                <div className='flex w-1/2 flex-wrap'>
+                  <div className='w-1/2 p-1 md:p-2'>
+                    <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[0]} />
+                  </div>
+                  <div className='w-1/2 p-1 md:p-2'>
+                    <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[1] ? imageUrls[1] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp'} />
+                  </div>
+                  <div className='w-full h-[300px] p-1 md:p-2'>
+                    <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[2] ? imageUrls[2] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(74).webp'} />
+                  </div>
+                </div>
+                <div className='flex w-1/2 flex-wrap'>
+                  <div className='w-full h-[300px] p-1 md:p-2'>
+                    <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[3] ? imageUrls[3] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(76).webp'} />
+                  </div>
+                  <div className='w-1/2 p-1 md:p-2'>
+                    <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[4] ? imageUrls[4] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(75).webp'} />
+                  </div>
+                  <div className='w-1/2 p-1 md:p-2'>
+                    <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[5] ? imageUrls[5] : 'https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(77).webp'} />
+                  </div>
+                </div>
+              </div>
             </div>
+            // <div className='py-2 grid grid-cols-4 gap-1 shadow-lg bg-white-50 px-5 mb-5 '>
+            //   {/* {villa.photo.map((item: any) => ( */}
+            //   {imageUrls.length > 0 && <img className='h-auto max-w-full rounded-lg' src={imageUrls[0]} alt='' />}
+            //   {/* ))} */}
+            // </div>
           )}
 
           <div className='shadow-2xl bg-white-50 px-5 drop-shadow-2xl bg-white'>
@@ -131,7 +166,6 @@ export default function VillaDetailPages() {
                 )}
               </div>
             </div>
-
             {/* Facilities */}
             {villa.facilities && (
               <>

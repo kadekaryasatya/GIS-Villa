@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVilla, postFacilitiesVilla, postHouseRules, postVillaDetail } from '../../utils/api';
+import React, { useState, useEffect, useCallback } from 'react';
+import { getCategoryList, getFacilitiesList, getHouseRulesList, postCategoryVilla, postFacilitiesVilla, postHouseRules, postPhotoVilla, postVillaDetail } from '../../utils/api';
 import MapComponent from '../../components/Map/Maps';
 import { ICategory, IFacilities, IHouseRules } from '../../utils/data';
 import { toast } from 'react-toastify';
-const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu                                                                                                         ']; // Example city data
+import { useDropzone } from 'react-dropzone';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import PocketBase from 'pocketbase';
+
+const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu']; // Example city data
+const pb = new PocketBase('https://gis-api.pockethost.io');
+
+interface Photo {
+  file: File;
+  preview: string;
+}
 
 function CreateVilla() {
   const [name, setName] = useState('');
@@ -17,6 +28,51 @@ function CreateVilla() {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedRules, setSelectedRules] = useState<string[]>([]);
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+  // const [selectedFile, setSelectedFile] = useState<File[]>([]);
+  const [photos, setPhotos] = useState<Photo[]>([]);
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const newPhotos: Photo[] = acceptedFiles.map((file) => ({
+        file,
+        preview: URL.createObjectURL(file),
+      }));
+
+      setPhotos([...photos, ...newPhotos.slice(0, 6 - photos.length)]);
+    },
+    [photos]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': [],
+    },
+    minSize: 0,
+    maxSize: 5242880, // 5MB in bytes
+    multiple: true,
+    disabled: photos.length >= 6,
+  });
+
+  const deletePhoto = (index: number) => {
+    const updatedPhotos = [...photos];
+    updatedPhotos.splice(index, 1);
+    setPhotos(updatedPhotos);
+  };
+
+  const thumbs = photos.map((photo, index) => (
+    <div key={index} className='w-32 h-32 m-2 relative z-10'>
+      <img src={photo.preview} alt={`Preview ${index}`} className='w-full h-full object-cover' />
+      <div className='absolute top-0 right-0 p-2'>
+        <FontAwesomeIcon
+          icon={faTrash}
+          size={'2xs'}
+          onClick={() => deletePhoto(index)}
+          className='bg-black text-white p-2 rounded-md hover:bg-[#FF7400] duration-100 transition transform scale-105 hover:scale-125 cursor-pointer absolute top-0 right-1 lg:right-0 mt-2 mr-3'
+        />
+      </div>
+    </div>
+  ));
 
   const handleLocationSelected = (lat: number, lng: number) => {
     setLatitude(lat);
@@ -47,6 +103,14 @@ function CreateVilla() {
     try {
       for (const facilities of selectedFacilities) {
         await postFacilitiesVilla(idVilla, facilities);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+
+    try {
+      for (const villa_photos of photos) {
+        await postPhotoVilla(idVilla, villa_photos);
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -134,6 +198,9 @@ function CreateVilla() {
   };
 
   console.log('selectedFacilities :>> ', selectedFacilities);
+
+  console.log('photos :>> ', photos);
+
   return (
     <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
       <h1 className='font-semibold text-2xl  '>Tell us about your Villa</h1>
@@ -150,7 +217,6 @@ function CreateVilla() {
             required
           ></input>
         </div>
-
         {/* Location */}
         <div className='mb-6'>
           <div>
@@ -173,9 +239,23 @@ function CreateVilla() {
             </select>
           </div>
         </div>
-
         {/* Location on Map */}
-        <MapComponent onLocationSelected={handleLocationSelected} />
+        <div className='mb-6'>
+          <MapComponent onLocationSelected={handleLocationSelected} />
+        </div>
+
+        {/* Villa Photo */}
+        <div className='mb-6'>
+          <label className='block mb-2 text-lg font-medium text-gray-900 '>Add Villa Photos</label>
+          <div className='border-2 p-5'>
+            <div {...getRootProps()} className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-gray-100 ${isDragActive ? 'border-blue-500' : 'border-gray-300'}`}>
+              <input {...getInputProps()} disabled={photos.length >= 6} />
+              <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
+            </div>
+            {thumbs.length > 0 && <div className='flex flex-wrap mt-4'>{thumbs}</div>}
+            {photos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
+          </div>
+        </div>
 
         {/* Category */}
         <div className=' mb-6'>
@@ -196,7 +276,6 @@ function CreateVilla() {
             </div>
           ))}
         </div>
-
         {/* Description */}
         <div className='mb-6 mt-10'>
           <label className='block mb-2 text-lg font-medium text-gray-900 '>Description</label>
@@ -208,7 +287,6 @@ function CreateVilla() {
             required
           ></textarea>
         </div>
-
         {/* HouseRules */}
         <div className=' mb-6'>
           <label className='block mb-2 text-lg font-medium text-gray-900 '>House Rules </label>
@@ -228,7 +306,6 @@ function CreateVilla() {
             </div>
           ))}
         </div>
-
         {/* Facilities */}
         <div className=' mb-6'>
           <label className='block mb-2 text-lg font-medium text-gray-900 '>Facilities</label>
@@ -248,7 +325,6 @@ function CreateVilla() {
             </div>
           ))}
         </div>
-
         {/* Room */}
         <div className='mb-6 mt-10'>
           <label className='block mb-2 text-lg font-medium text-gray-900 '>Room</label>
@@ -294,7 +370,6 @@ function CreateVilla() {
             ></input>
           </div>
         </div>
-
         <button
           onClick={handleSubmit}
           type='submit'
