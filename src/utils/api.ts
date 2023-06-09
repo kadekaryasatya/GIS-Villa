@@ -51,13 +51,14 @@ async function getVillaDetail(id: any): Promise<IVilla> {
   return villa;
 }
 
-async function postVillaDetail(name: string, description: string, latitude: number, longitude: number, location: string) {
+async function postVillaDetail(name: string, description: string, latitude: number, longitude: number, location: string, price: number) {
   const villa = {
     name: name,
     description: description,
     latitude: latitude,
     longitude: longitude,
     location: location,
+    price: price,
   };
 
   const createdVilla = await pb.collection('villa').create(villa);
@@ -178,4 +179,15 @@ async function postRoomDetail(name: string, idVilla: string, bed: number, bath: 
   return id_room;
 }
 
-export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla, postHouseRules, postFacilitiesVilla, postPhotoVilla, postRoomDetail };
+const postPhotoRoom = async (idRoom: string, file: File) => {
+  const formData = new FormData();
+
+  formData.append('room', idRoom);
+  formData.append('path_room_photo', file);
+
+  await pb.collection('room_photo').create(formData);
+
+  return formData;
+};
+
+export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla, postPhotoRoom, postHouseRules, postFacilitiesVilla, postPhotoVilla, postRoomDetail };

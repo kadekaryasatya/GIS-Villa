@@ -11,7 +11,7 @@ function Listing(): JSX.Element {
 
   const handleDelete = (id: string) => {
     MySwal.fire({
-      title: 'Are you sure?',
+      title: 'Are you sure delet this villa?',
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
@@ -22,10 +22,10 @@ function Listing(): JSX.Element {
       if (result.isConfirmed) {
         try {
           await deleteVilla(id);
-          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          Swal.fire('Deleted!', 'Your villa has been deleted.', 'success');
           setVillaList((prevVillas) => prevVillas.filter((villa) => villa.id !== id));
         } catch (error) {
-          Swal.fire('Error', 'An error occurred while deleting the file.', 'error');
+          Swal.fire('Error', 'An error occurred while deleting the villa.', 'error');
         }
       }
     });
