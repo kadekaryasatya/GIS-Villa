@@ -208,15 +208,6 @@ function CreateVilla() {
       .then(() => {
         navigate('/dashboard/list');
       });
-
-    setName('');
-    setDescription('');
-    setLatitude(0);
-    setLongitude(0);
-    setSelectedCity('');
-    setSelectedCategories(['']);
-    setSelectedFacilities(['']);
-    setSelectedRules(['']);
   };
 
   useEffect(() => {
@@ -287,7 +278,7 @@ function CreateVilla() {
   };
 
   return (
-    <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
+    <div className='py-5 px-[50px] max-w-[1366px] mx-auto shadow-lg bg-white-50 mt-5 drop-shadow-2xl bg-white'>
       <Toaster />
       <h1 className='font-semibold text-2xl  '>Tell us about your Villa</h1>
       <form>

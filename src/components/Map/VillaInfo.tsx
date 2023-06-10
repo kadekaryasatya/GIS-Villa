@@ -1,8 +1,6 @@
 import { IVilla } from '../../utils/data';
 import Badge from '../Badge/Badge';
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 const VillaInfo = (props: { data: IVilla }) => {
   const { data } = props;

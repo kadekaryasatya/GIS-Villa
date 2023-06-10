@@ -156,7 +156,7 @@ export default function VillaDetailPages() {
               {villa ? (
                 <>
                   <h1 className='text-2xl font-semibold mt-5'>Description</h1>
-                  <h1 className=' mt-3 '>{villa?.description}</h1>
+                  <h1 className=' mt-3  '>{villa?.description}</h1>
                 </>
               ) : (
                 <Skeleton height={180} className='mt-2' />
@@ -183,32 +183,32 @@ export default function VillaDetailPages() {
               {villa ? (
                 <div className='my-5 shadow-lg  px-5 py-2 border rounded-2xl'>
                   <h1 className='text-lg font-semibold '>Room Available </h1>
-                  <div className='flex-col gap-2 py-5 '>
+                  <div className='flex gap-2 py-5 justify-between'>
                     {villa.room?.map((item: any) => (
-                      <div key={item.id} className='flex gap-5 mb-4 bg-orange-50 shadow py-2 px-4 rounded-2xl border'>
-                        <div className='w-[200px]'>
+                      <div key={item.id} className='shadow-lg border '>
+                        <div className='w-[250px]'>
                           <Slider {...settings}>
                             {item.expand['room_photo(room)']?.map((photo: any) => (
                               <div key={photo.id}>
-                                <img src={`https://gis-api.pockethost.io/api/files/8vo79sa9oofehjs/` + photo.id + `/` + photo.path_room_photo} alt={item.name} className='w-[200px] h-[150px] rounded-xl shadow' />
+                                <img src={`https://gis-api.pockethost.io/api/files/8vo79sa9oofehjs/` + photo.id + `/` + photo.path_room_photo} alt={item.name} className=' h-[150px] w-full shadow' />
                               </div>
                             ))}
                           </Slider>
                         </div>
-                        <div className='flex flex-col justify-between'>
+                        <div className='flex flex-col justify-between p-2'>
                           <div>
                             <h1 className='font-semibold text-lg'>{item.name}</h1>
-                            <div className='flex gap-2 items-center mt-2'>
+                            <div className='flex gap-2 items-center mt-1 text-xs'>
                               <FontAwesomeIcon icon={faBed} className='items-center' />
-                              <h1 className='font-semibold text-sm'>Bed : {item.bed}</h1>
+                              <h1 className='font-semibold '>Bed : {item.bed}</h1>
                             </div>
-                            <div className='flex gap-2 items-center mt-2'>
+                            <div className='flex gap-2 items-center text-xs '>
                               <FontAwesomeIcon icon={faBath} className='items-center' />
-                              <h1 className='font-semibold text-sm'>Bathroom : {item.bath}</h1>
+                              <h1 className='font-semibold'>Bathroom : {item.bath}</h1>
                             </div>
                           </div>
-                          <div>
-                            <p className='font-semibold  mb-5  text-orange-600 '>
+                          <div className='mt-5 flex justify-end'>
+                            <p className='font-semibold  mb-2  text-orange-600 '>
                               {item.price_per_night.toLocaleString('id-ID', {
                                 style: 'currency',
                                 currency: 'IDR',
