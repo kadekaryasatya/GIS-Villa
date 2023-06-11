@@ -280,16 +280,16 @@ function CreateVilla() {
   return (
     <div className='py-5 px-[50px] max-w-[1366px] mx-auto shadow-lg bg-white-50 mt-5 drop-shadow-2xl bg-white'>
       <Toaster />
-      <h1 className='font-semibold text-2xl  '>Tell us about your Villa</h1>
+      <h1 className='font-semibold text-2xl  '>Villa Information</h1>
       <form>
         {/* Villa Name */}
-        <div className='mb-6 mt-10'>
-          <label className='block mb-2 text-lg font-medium text-gray-900 '>Villa Name</label>
+        <div className='mb-6 mt-5'>
+          <label className='block mb-2 text-medium font-medium text-gray-900 '>Villa Name*</label>
           <input
             type='text'
             onChange={(e) => setName(e.target.value)}
             id='name'
-            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
             placeholder='Example : Villa Cyan'
             required
           ></input>
@@ -298,17 +298,19 @@ function CreateVilla() {
         {/* Location */}
         <div className='mb-6'>
           <div>
-            <label htmlFor='city' className='block mb-2 text-lg font-medium text-gray-900'>
-              Select City
+            <label htmlFor='city' className='block mb-2 text-medium font-medium text-gray-900'>
+              Select City*
             </label>
             <select
               id='city'
               name='city'
               value={selectedCity}
               onChange={handleCityChange}
-              className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+              className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
             >
-              <option value=''>-- Select a city --</option>
+              <option value='' className='text-gray-100'>
+                -- Select a city --
+              </option>
               {cities.map((city) => (
                 <option key={city} value={city}>
                   {city}
@@ -325,12 +327,12 @@ function CreateVilla() {
 
         {/* Villa price */}
         <div className='mb-5'>
-          <label className='text-sm  text-gray-900 mr-2'>Price</label>
+          <label className='text-sm  text-gray-900 mr-2'>Price*</label>
           <input
             onChange={(e) => setPriceStart(parseInt(e.target.value))}
             type='number'
             id='roomPrice'
-            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
             placeholder='Example : 275000'
             required
           ></input>
@@ -338,9 +340,9 @@ function CreateVilla() {
 
         {/* Villa Photo */}
         <div className='mb-6'>
-          <label className='block mb-2 text-lg font-medium text-gray-900 '>Add Villa Photos</label>
-          <div className='border-2 p-5'>
-            <div {...getRootPropsPhotos()} className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-gray-100 ${isDragActivePhotos ? 'border-blue-500' : 'border-gray-300'}`}>
+          <label className='block mb-2 text-medium font-medium text-gray-900 '>Add Villa Photos*</label>
+          <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
+            <div {...getRootPropsPhotos()} className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActivePhotos ? 'border-blue-500' : 'border-gray-300'}`}>
               <input {...getInputPropsPhotos()} disabled={photos.length >= 6} />
               <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
             </div>
@@ -350,8 +352,8 @@ function CreateVilla() {
         </div>
 
         {/* Category */}
-        <div className=' mb-6'>
-          <label className='block mb-2 text-lg font-medium text-gray-900 '>Category </label>
+        <div className='mb-6'>
+          <label className='block mb-2 text-medium font-medium text-gray-900'>Category*</label>
           {categoryList.map((item) => (
             <div className='flex mb-2' key={item.id}>
               <div className='flex items-center h-5'>
@@ -361,27 +363,35 @@ function CreateVilla() {
                   value={item.id}
                   checked={selectedCategories.includes(item.id)}
                   onChange={(e) => handleCategoryChange(e.target.value)}
-                  className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300  dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
-                ></input>
+                  className={`w-4 h-4 rounded text-orange-500 form-checkbox focus:ring-3 focus:ring-blue-300 accent-orange-500 
+            dark:text-orange-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800`}
+                />
               </div>
-              <label className='ml-2 text-sm  text-gray-900 '>{item.name}</label>
+              <label
+                className={`ml-2 text-sm text-gray-900 
+          ${selectedCategories.includes(item.id) ? 'text-orange-500' : ''}`}
+              >
+                {item.name}
+              </label>
             </div>
           ))}
         </div>
+
         {/* Description */}
         <div className='mb-6 mt-10'>
-          <label className='block mb-2 text-lg font-medium text-gray-900 '>Description</label>
+          <label className='block mb-2 text-medium font-medium text-gray-900'>Description*</label>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             id='description'
-            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
-            placeholder=''
+            placeholder='write desription aout your villa'
             required
+            className='border text-gray-900 text-sm rounded-lg focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5 border-orange-300 dark:placeholder-gray-400 resize-none h-40'
           ></textarea>
         </div>
+
         {/* HouseRules */}
         <div className=' mb-6'>
-          <label className='block mb-2 text-lg font-medium text-gray-900 '>House Rules </label>
+          <label className='block mb-2 text-medium font-medium text-gray-900 '>House Rules* </label>
           {houseRulesList.map((item) => (
             <div className='flex mb-2' key={item.id}>
               <div className='flex items-center h-5'>
@@ -391,16 +401,23 @@ function CreateVilla() {
                   type='checkbox'
                   value={item.id}
                   checked={selectedRules.includes(item.id)}
-                  className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300  dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
-                ></input>
+                  className={`w-4 h-4 rounded text-orange-500 form-checkbox focus:ring-3 focus:ring-blue-300 accent-orange-500 
+                dark:text-orange-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800`}
+                />
               </div>
-              <label className='ml-2 text-sm  text-gray-900 '>{item.name}</label>
+              <label
+                className={`ml-2 text-sm text-gray-900 
+          ${selectedRules.includes(item.id) ? 'text-orange-500' : ''}`}
+              >
+                {item.name}
+              </label>
             </div>
           ))}
         </div>
+
         {/* Facilities */}
         <div className=' mb-6'>
-          <label className='block mb-2 text-lg font-medium text-gray-900 '>Facilities</label>
+          <label className='block mb-2 text-medium font-medium text-gray-900 '>Facilities*</label>
           {facilitiesList.map((item) => (
             <div className='flex mb-2' key={item.id}>
               <div className='flex items-center h-5'>
@@ -410,57 +427,64 @@ function CreateVilla() {
                   id={item.id}
                   type='checkbox'
                   value={item.id}
-                  className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300  dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
+                  className={`w-4 h-4 rounded text-orange-500 form-checkbox focus:ring-3 focus:ring-blue-300 accent-orange-500 
+                  dark:text-orange-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800`}
                 ></input>
               </div>
-              <label className='ml-2 text-sm  text-gray-900 '>{item.name}</label>
+              <label
+                className={`ml-2 text-sm text-gray-900 
+          ${selectedFacilities.includes(item.id) ? 'text-orange-500' : ''}`}
+              >
+                {item.name}
+              </label>
             </div>
           ))}
         </div>
+
         {/* Room */}
         <div className='mb-6 mt-10'>
-          <label className='block mb-2 text-lg font-medium text-gray-900 '>Room</label>
+          <label className='block mb-2 text-lg font-semibold text-gray-900 '>Room Information</label>
           <div>
-            <label className='text-sm  text-gray-900 mr-2'>Room name</label>
+            <label className='text-medium  text-gray-900 mr-2'>Room name*</label>
             <input
               onChange={(e) => setRoomName(e.target.value)}
               type='text'
               id='roomName'
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
               placeholder='Example : Double Standard'
               required
             ></input>
           </div>
           <div className='flex gap-2'>
             <div className='w-full'>
-              <label className='text-sm  text-gray-900 mr-2'>Bed</label>
+              <label className='text-medium  text-gray-900 mr-2'>Bed*</label>
               <input
                 onChange={(e) => setBed(parseInt(e.target.value))}
                 type='number'
                 id='roomBed'
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
                 required
               ></input>
             </div>
             <div className='w-full'>
-              <label className='text-sm  text-gray-900 mr-2'>Bathroom</label>
+              <label className='text-medium  text-gray-900 mr-2'>Bathroom*</label>
               <input
                 onChange={(e) => setBath(parseInt(e.target.value))}
                 type='number'
                 id='roomBath'
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
                 required
               ></input>
             </div>
           </div>
 
           <div>
-            <label className='text-sm  text-gray-900 mr-2'>Price</label>
+            <label className='text-medium  text-gray-900 mr-2'>Price*</label>
             <input
               onChange={(e) => setPrice(parseInt(e.target.value))}
               type='number'
               id='roomPrice'
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
               placeholder='Example : 275000'
               required
             ></input>
@@ -468,9 +492,9 @@ function CreateVilla() {
 
           {/* Room Photo */}
           <div className='mb-6'>
-            <label className='block mb-2 text-lg font-medium text-gray-900 mt-3'>Add Room Photos</label>
-            <div className='border-2 p-5'>
-              <div {...getRootPropsRoom()} className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-gray-100 ${isDragActiveRoom ? 'border-blue-500' : 'border-gray-300'}`}>
+            <label className='block mb-2 text-medium font-medium text-gray-900 mt-3'>Add Room Photos*</label>
+            <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
+              <div {...getRootPropsRoom()} className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActivePhotos ? 'border-blue-500' : 'border-gray-300'}`}>
                 <input {...getInputPropsRoom()} disabled={roomPhotos.length >= 6} />
                 <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
               </div>
