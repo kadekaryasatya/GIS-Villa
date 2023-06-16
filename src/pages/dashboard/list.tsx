@@ -81,7 +81,10 @@ function Listing(): JSX.Element {
                   })}
                 </td>
                 <td className='px-6 py-4'>
-                  <a href={`/villa/${item.id}`} key={item.id} className='font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2 '>
+                  <a href={`/villa/${item.id}`} className='font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2 '>
+                    View
+                  </a>
+                  <a href={`/dashboard/villa/${item.id}`} className='font-medium  text-green-500 hover:underline mr-2 '>
                     Edit
                   </a>
                   <button className='font-medium text-red-600  hover:underline' onClick={() => handleDelete(item.id)}>
