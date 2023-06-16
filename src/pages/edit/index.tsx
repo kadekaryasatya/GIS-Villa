@@ -117,7 +117,7 @@ const VillaDetailEdit = () => {
             </div>
 
             {/* Description */}
-            <div className='mb-6 flex gap-2'>
+            <div className='mb-6 '>
               <div>
                 <label htmlFor='description' className='block mb-2 text-medium font-medium text-gray-900'>
                   Description<span className='text-orange-500'>:</span>
@@ -142,12 +142,20 @@ const VillaDetailEdit = () => {
               </div>
             </div>
 
+            {/* Room Information */}
             <div>
               <div className='my-5 '>
                 <h1 className='text-lg font-semibold '>Room Information </h1>
-                <div className='flex gap-2 py-5 justify-between'>
+
+                <div className=' gap-2 py-5 justify-between'>
                   {villa.room?.map((item: any) => (
-                    <div key={item.id} className=''>
+                    <div key={item.id} className='mt-2'>
+                      <div className='flex gap-2'>
+                        <label htmlFor='roomName' className='block mb-2 text-medium font-medium text-gray-900'>
+                          Room Name<span className='text-orange-500'>:</span>
+                        </label>
+                        <h1 className=''>{item.name}</h1>
+                      </div>
                       <label htmlFor='houserules' className='block mb-2 text-medium font-medium text-gray-900'>
                         Room Photo<span className='text-orange-500'>:</span>
                       </label>
@@ -158,14 +166,8 @@ const VillaDetailEdit = () => {
                           </div>
                         ))}
                       </div>
-                      <div className='flex flex-col justify-between p-2'>
+                      <div className='flex flex-col justify-between '>
                         <div>
-                          <div className='flex gap-2'>
-                            <label htmlFor='roomName' className='block mb-2 text-medium font-medium text-gray-900'>
-                              Room Name<span className='text-orange-500'>:</span>
-                            </label>
-                            <h1 className=''>{item.name}</h1>
-                          </div>
                           <div className='flex gap-2 items-center mt-1 text-xs'>
                             <FontAwesomeIcon icon={faBed} className='items-center' />
                             <h1 className='font-semibold '>Bed : {item.bed}</h1>
@@ -188,6 +190,7 @@ const VillaDetailEdit = () => {
                           </p>
                         </div>
                       </div>
+                      <hr />
                     </div>
                   ))}
                 </div>
