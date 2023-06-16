@@ -323,8 +323,13 @@ function CreateVilla() {
           </div>
 
           {/* Location on Map */}
-          <div className='mb-6'>
-            <MapComponent onLocationSelected={handleLocationSelected} />
+          <div>
+            <label htmlFor='map' className='block mb-2 text-medium font-medium text-gray-900'>
+              Choose location on map<span className='text-orange-500'>*</span>
+            </label>
+            <div className='mb-6 border-orange-300 border-2 rounded-lg'>
+              <MapComponent onLocationSelected={handleLocationSelected} />
+            </div>
           </div>
 
           {/* Villa price */}
@@ -353,7 +358,7 @@ function CreateVilla() {
                 className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActivePhotos ? 'border-blue-500' : 'border-gray-300'}`}
               >
                 <input {...getInputPropsPhotos()} disabled={photos.length >= 6} />
-                <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
+                <p>Drag and drop some files here, or click to select files (Min / Max 6 photo)</p>
               </div>
               {thumbs.length > 0 && <div className='flex flex-wrap mt-4'>{thumbs}</div>}
               {photos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}

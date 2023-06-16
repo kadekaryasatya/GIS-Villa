@@ -207,7 +207,7 @@ export default function VillaDetailPages() {
                               <h1 className='font-semibold'>Bathroom : {item.bath}</h1>
                             </div>
                           </div>
-                          <div className='mt-5 flex justify-end'>
+                          <div className='mt-3 flex justify-end'>
                             <p className='font-semibold  mb-2  text-orange-600 '>
                               {item.price_per_night.toLocaleString('id-ID', {
                                 style: 'currency',
