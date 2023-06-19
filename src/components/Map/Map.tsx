@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+import 'react-leaflet-markercluster/dist/styles.min.css';
 import { IVilla } from '../../utils/data';
 import L from 'leaflet';
 import icon from './marker.png';
@@ -33,9 +35,9 @@ export default function Maps() {
   }, [villaList]);
   return (
     <>
-      <div className=''>
-        <MapContainer center={[-8.6828693, 115.2004822]} zoom={13} style={{ height: '90vh', width: '100%' }}>
-          <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors" />
+      <MapContainer center={[-8.6828693, 115.2004822]} zoom={13} style={{ height: '90vh', width: '100%' }}>
+        <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors" />
+        <MarkerClusterGroup>
           {markerData.map((villa: IVilla) => (
             <Marker key={villa.id} position={[villa.lat, villa.lng]} icon={locationIcon}>
               <Popup className=''>
@@ -45,8 +47,8 @@ export default function Maps() {
               </Popup>
             </Marker>
           ))}
-        </MapContainer>
-      </div>
+        </MarkerClusterGroup>
+      </MapContainer>
     </>
   );
 }
