@@ -33,6 +33,7 @@ const VillaInfo = (props: { data: IVilla }) => {
           {data.price.toLocaleString('id-ID', {
             style: 'currency',
             currency: 'IDR',
+            minimumFractionDigits: 0,
           })}
           <span className='font-normal'> /malam</span>
         </p>

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { toast, Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Slider from '@mui/material/Slider';
 const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu']; // Example city data
 
 interface Photo {
@@ -22,7 +23,6 @@ interface RoomPhoto {
 function CreateVilla() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [priceStart, setPriceStart] = useState(0);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [categoryList, setCategoryList] = useState<Array<ICategory>>([]);
@@ -38,8 +38,17 @@ function CreateVilla() {
   const [bed, setBed] = useState(0);
   const [bath, setBath] = useState(0);
   const [price, setPrice] = useState(0);
+  const [roomCount, setRoomCount] = useState(1);
+  const [range, setRange] = React.useState([300000, 500000]);
+  function handleChanges(event: any, newValue: any) {
+    setRange(newValue);
+  }
 
   const navigate = useNavigate();
+
+  const addRoomForm = () => {
+    setRoomCount(roomCount + 1);
+  };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newPhotos: Photo[] = acceptedFiles.map((file) => ({
@@ -187,7 +196,7 @@ function CreateVilla() {
     e.preventDefault();
     const create = async () => {
       try {
-        const createdVilla = await postVillaDetail(name, description, latitude, longitude, selectedCity, priceStart);
+        const createdVilla = await postVillaDetail(name, description, latitude, longitude, selectedCity, range[0]);
         const id_villa = createdVilla.id;
         await store(id_villa);
       } catch (error: any) {
@@ -274,6 +283,10 @@ function CreateVilla() {
     setSelectedFacilities(updatedFacilities);
   };
 
+  const removeRoomForm = (index: any) => {
+    setRoomCount(roomCount - 1);
+    // You may also need to remove any corresponding data from your state variables
+  };
   return (
     <>
       <div className='fixed top-0 right-0 z-50'>
@@ -335,16 +348,20 @@ function CreateVilla() {
           {/* Villa price */}
           <div className='mb-5'>
             <label className='text-sm  text-gray-900 mr-2'>
-              Price<span className='text-orange-500'>*</span>
+              Price Range<span className='text-orange-500'>*</span> :
             </label>
-            <input
-              onChange={(e) => setPriceStart(parseInt(e.target.value))}
-              type='number'
-              id='roomPrice'
-              className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
-              placeholder='Example : 275000'
-              required
-            ></input>
+            {range[0].toLocaleString('id-ID', {
+              style: 'currency',
+              currency: 'IDR',
+              minimumFractionDigits: 0,
+            })}
+            <span> - </span>
+            {range[1].toLocaleString('id-ID', {
+              style: 'currency',
+              currency: 'IDR',
+              minimumFractionDigits: 0,
+            })}
+            <Slider value={range} onChange={handleChanges} valueLabelDisplay='auto' min={100000} max={5000000} step={100000} marks />
           </div>
 
           {/* Villa Photo */}
@@ -466,75 +483,170 @@ function CreateVilla() {
           {/* Room */}
           <div className='mb-6 mt-10'>
             <label className='block mb-2 text-lg font-semibold text-gray-900 '>Room Information</label>
-            <div>
-              <label className='text-medium  text-gray-900 mr-2'>
-                Room name<span className='text-orange-500'>*</span>
-              </label>
-              <input
-                onChange={(e) => setRoomName(e.target.value)}
-                type='text'
-                id='roomName'
-                className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
-                placeholder='Example : Double Standard'
-                required
-              ></input>
-            </div>
-            <div className='flex gap-2'>
-              <div className='w-full'>
+            <>
+              <div>
                 <label className='text-medium  text-gray-900 mr-2'>
-                  Bed<span className='text-orange-500'>*</span>
+                  Room name<span className='text-orange-500'>*</span>
                 </label>
                 <input
-                  onChange={(e) => setBed(parseInt(e.target.value))}
-                  type='number'
-                  id='roomBed'
+                  onChange={(e) => setRoomName(e.target.value)}
+                  type='text'
+                  id='roomName'
                   className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                  placeholder='Example : Double Standard'
                   required
                 ></input>
               </div>
-              <div className='w-full'>
-                <label className='text-medium  text-gray-900 mr-2'>
-                  Bathroom<span className='text-orange-500'>*</span>
-                </label>
-                <input
-                  onChange={(e) => setBath(parseInt(e.target.value))}
-                  type='number'
-                  id='roomBath'
-                  className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
-                  required
-                ></input>
-              </div>
-            </div>
-
-            <div>
-              <label className='text-medium  text-gray-900 mr-2'>
-                Price<span className='text-orange-500'>*</span>
-              </label>
-              <input
-                onChange={(e) => setPrice(parseInt(e.target.value))}
-                type='number'
-                id='roomPrice'
-                className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
-                placeholder='Example : 275000'
-                required
-              ></input>
-            </div>
-
-            {/* Room Photo */}
-            <div className='mb-6'>
-              <label className='block mb-2 text-medium font-medium text-gray-900 mt-3'>
-                Add Room Photos<span className='text-orange-500'>*</span>
-              </label>
-              <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
-                <div {...getRootPropsRoom()} className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActiveRoom ? 'border-blue-500' : 'border-gray-300'}`}>
-                  <input {...getInputPropsRoom()} disabled={roomPhotos.length >= 6} />
-                  <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
+              <div className='flex gap-2'>
+                <div className='w-full'>
+                  <label className='text-medium  text-gray-900 mr-2'>
+                    Bed<span className='text-orange-500'>*</span>
+                  </label>
+                  <input
+                    onChange={(e) => setBed(parseInt(e.target.value))}
+                    type='number'
+                    id='roomBed'
+                    className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                    required
+                  ></input>
                 </div>
-                {Roomthumbs.length > 0 && <div className='flex flex-wrap mt-4'>{Roomthumbs}</div>}
-                {roomPhotos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
+                <div className='w-full'>
+                  <label className='text-medium  text-gray-900 mr-2'>
+                    Bathroom<span className='text-orange-500'>*</span>
+                  </label>
+                  <input
+                    onChange={(e) => setBath(parseInt(e.target.value))}
+                    type='number'
+                    id='roomBath'
+                    className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                    required
+                  ></input>
+                </div>
+              </div>
+
+              <div>
+                <label className='text-medium  text-gray-900 mr-2'>
+                  Price<span className='text-orange-500'>*</span>
+                </label>
+                <input
+                  onChange={(e) => setPrice(parseInt(e.target.value))}
+                  type='number'
+                  id='roomPrice'
+                  className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                  placeholder='Example : 275000'
+                  required
+                ></input>
+              </div>
+
+              {/* Room Photo */}
+              <div className='mb-6'>
+                <label className='block mb-2 text-medium font-medium text-gray-900 mt-3'>
+                  Add Room Photos<span className='text-orange-500'>*</span>
+                </label>
+                <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
+                  <div
+                    {...getRootPropsRoom()}
+                    className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActiveRoom ? 'border-blue-500' : 'border-gray-300'}`}
+                  >
+                    <input {...getInputPropsRoom()} disabled={roomPhotos.length >= 6} />
+                    <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
+                  </div>
+                  {Roomthumbs.length > 0 && <div className='flex flex-wrap mt-4'>{Roomthumbs}</div>}
+                  {roomPhotos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
+                </div>
+              </div>
+            </>
+            <>
+              {Array.from({ length: roomCount - 1 }, (_, index) => (
+                <div key={index} className='mt-6'>
+                  <div className='mb-6 mt-10'>
+                    <div>
+                      <label className='text-medium  text-gray-900 mr-2'>
+                        Room name<span className='text-orange-500'>*</span>
+                      </label>
+                      <input
+                        onChange={(e) => setRoomName(e.target.value)}
+                        type='text'
+                        id='roomName'
+                        className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                        placeholder='Example : Double Standard'
+                        required
+                      ></input>
+                    </div>
+                    <div className='flex gap-2'>
+                      <div className='w-full'>
+                        <label className='text-medium  text-gray-900 mr-2'>
+                          Bed<span className='text-orange-500'>*</span>
+                        </label>
+                        <input
+                          onChange={(e) => setBed(parseInt(e.target.value))}
+                          type='number'
+                          id='roomBed'
+                          className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                          required
+                        ></input>
+                      </div>
+                      <div className='w-full'>
+                        <label className='text-medium  text-gray-900 mr-2'>
+                          Bathroom<span className='text-orange-500'>*</span>
+                        </label>
+                        <input
+                          onChange={(e) => setBath(parseInt(e.target.value))}
+                          type='number'
+                          id='roomBath'
+                          className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                          required
+                        ></input>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className='text-medium  text-gray-900 mr-2'>
+                        Price<span className='text-orange-500'>*</span>
+                      </label>
+                      <input
+                        onChange={(e) => setPrice(parseInt(e.target.value))}
+                        type='number'
+                        id='roomPrice'
+                        className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                        placeholder='Example : 275000'
+                        required
+                      ></input>
+                    </div>
+
+                    {/* Room Photo */}
+                    <div className='mb-6'>
+                      <label className='block mb-2 text-medium font-medium text-gray-900 mt-3'>
+                        Add Room Photos<span className='text-orange-500'>*</span>
+                      </label>
+                      <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
+                        <div
+                          {...getRootPropsRoom()}
+                          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActiveRoom ? 'border-blue-500' : 'border-gray-300'}`}
+                        >
+                          <input {...getInputPropsRoom()} disabled={roomPhotos.length >= 6} />
+                          <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
+                        </div>
+                        {Roomthumbs.length > 0 && <div className='flex flex-wrap mt-4'>{Roomthumbs}</div>}
+                        {roomPhotos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Delete button */}
+                  <button onClick={() => removeRoomForm(index)} className='mt-2 px-4 py-2 bg-red-500 text-white rounded-lg'>
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </>
+            <div className='flex justify-end'>
+              <div onClick={addRoomForm} className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer'>
+                Add Room +
               </div>
             </div>
           </div>
+
           <button
             onClick={handleSubmit}
             type='submit'

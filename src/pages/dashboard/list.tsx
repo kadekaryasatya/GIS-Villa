@@ -109,6 +109,7 @@ function Listing(): JSX.Element {
                     {item.price.toLocaleString('id-ID', {
                       style: 'currency',
                       currency: 'IDR',
+                      minimumFractionDigits: 0,
                     })}
                   </td>
                   <td className='px-6 py-4'>
