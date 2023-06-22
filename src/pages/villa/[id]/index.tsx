@@ -5,13 +5,13 @@ import { getVillaDetail } from '../../../utils/api';
 import Badge from '../../../components/Badge/Badge';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import Maps from '../../../components/Map/Map';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBath, faBed } from '@fortawesome/free-solid-svg-icons';
 import BoxInfo from '../../../components/BoxInfo/BoxInfo';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import MapVilla from '../../../components/Map/MapVilla';
 
 export default function VillaDetailPages() {
   const settings = {
@@ -240,9 +240,9 @@ export default function VillaDetailPages() {
               </div>
             </>
           )}
-          <div className='mt-5'>
-            <h1 className='text-2xl font-semibold mt-5 mb-3'>See other Villas </h1>
-            <Maps />
+          <div className='mt-5 '>
+            <h1 className='text-2xl font-semibold mt-5 mb-3'>Location on Map </h1>
+            {villa && <MapVilla data={villa} />}
           </div>
         </div>
       </div>

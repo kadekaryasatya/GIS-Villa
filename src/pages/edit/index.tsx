@@ -23,7 +23,7 @@ const VillaDetailEdit = () => {
     };
     fetchVilla();
   }, [id]);
-
+console.log('villa :>> ', villa);
   useEffect(() => {
     // Extract the image URLs from the villa object and update the state
     if (villa && villa.photo) {

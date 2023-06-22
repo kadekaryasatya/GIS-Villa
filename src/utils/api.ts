@@ -15,6 +15,7 @@ async function getVillaList(): Promise<IVilla[]> {
       description: record.description,
       location: record.location,
       price: record.price,
+      price_end: record.price_end,
       lat: record.latitude,
       lng: record.longitude,
       photo: record.expand['villa_photos(villa)'],
@@ -51,7 +52,7 @@ async function getVillaDetail(id: any): Promise<IVilla> {
   return villa;
 }
 
-async function postVillaDetail(name: string, description: string, latitude: number, longitude: number, location: string, price: number) {
+async function postVillaDetail(name: string, description: string, latitude: number, longitude: number, location: string, price: number, price_end: number) {
   const villa = {
     name: name,
     description: description,
@@ -59,6 +60,7 @@ async function postVillaDetail(name: string, description: string, latitude: numb
     longitude: longitude,
     location: location,
     price: price,
+    price_end: price_end,
   };
 
   const createdVilla = await pb.collection('villa').create(villa);

@@ -40,6 +40,8 @@ function CreateVilla() {
   const [price, setPrice] = useState(0);
   const [roomCount, setRoomCount] = useState(1);
   const [range, setRange] = React.useState([300000, 500000]);
+  const [roomForms, setRoomForms] = useState([{ roomName: '', bed: 0, bath: 0, price: 0 }]);
+
   function handleChanges(event: any, newValue: any) {
     setRange(newValue);
   }
@@ -196,7 +198,7 @@ function CreateVilla() {
     e.preventDefault();
     const create = async () => {
       try {
-        const createdVilla = await postVillaDetail(name, description, latitude, longitude, selectedCity, range[0]);
+        const createdVilla = await postVillaDetail(name, description, latitude, longitude, selectedCity, range[0], range[1]);
         const id_villa = createdVilla.id;
         await store(id_villa);
       } catch (error: any) {

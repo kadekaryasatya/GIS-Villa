@@ -87,10 +87,10 @@ function Listing(): JSX.Element {
                 <th scope='col' className='px-6 py-3'>
                   Location
                 </th>
-                <th scope='col' className='px-6 py-3'>
-                  Price
+                <th scope='col' className='px-16 py-3'>
+                  Price_Range
                 </th>
-                <th scope='col' className='px-6 py-3'>
+                <th scope='col' className='px-12 py-3'>
                   Action
                 </th>
               </tr>
@@ -107,6 +107,12 @@ function Listing(): JSX.Element {
                   <td className='px-6 py-4'>{item.location}</td>
                   <td className='px-6 py-4'>
                     {item.price.toLocaleString('id-ID', {
+                      style: 'currency',
+                      currency: 'IDR',
+                      minimumFractionDigits: 0,
+                    })}
+                    <span> - </span>
+                    {item.price_end?.toLocaleString('id-ID', {
                       style: 'currency',
                       currency: 'IDR',
                       minimumFractionDigits: 0,

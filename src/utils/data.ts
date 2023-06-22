@@ -4,6 +4,7 @@ export interface IVilla {
   location: string;
   description: string;
   price: number;
+  price_end?: number;
   lat: number;
   lng: number;
   photo: any | Array<any>;
