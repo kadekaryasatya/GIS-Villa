@@ -183,7 +183,7 @@ export default function VillaDetailPages() {
               {villa ? (
                 <div className='my-5 shadow-lg  px-5 py-2 border rounded-2xl'>
                   <h1 className='text-lg font-semibold '>Room Available </h1>
-                  <div className='flex gap-2 py-5 justify-between'>
+                  <div className='grid grid-cols-2 gap-2 py-5 justify-between'>
                     {villa.room?.map((item: any) => (
                       <div key={item.id} className='shadow-lg border '>
                         <div className='w-[250px]'>

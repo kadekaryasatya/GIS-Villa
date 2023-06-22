@@ -40,7 +40,8 @@ function CreateVilla() {
   const [price, setPrice] = useState(0);
   const [roomCount, setRoomCount] = useState(1);
   const [range, setRange] = React.useState([300000, 500000]);
-  const [roomForms, setRoomForms] = useState([{ roomName: '', bed: 0, bath: 0, price: 0 }]);
+  const [rooms, setRooms] = useState([]); // State variable to store room data
+  const [roomForms, setRoomForms] = useState([{ roomName: '', bed: 0, bath: 0, price: 0, roomPhotos: [] }]);
 
   function handleChanges(event: any, newValue: any) {
     setRange(newValue);
@@ -49,7 +50,13 @@ function CreateVilla() {
   const navigate = useNavigate();
 
   const addRoomForm = () => {
-    setRoomCount(roomCount + 1);
+    setRoomForms([...roomForms, { roomName: '', bed: 0, bath: 0, price: 0, roomPhotos: [] }]);
+  };
+
+  const removeRoomForm = (index: any) => {
+    const updatedForms = [...roomForms];
+    updatedForms.splice(index, 1);
+    setRoomForms(updatedForms);
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -192,6 +199,20 @@ function CreateVilla() {
     } catch (error: any) {
       toast.error(error.message);
     }
+
+    try {
+      // Loop through each room form data
+      for (const roomForm of roomForms) {
+        // Post room detail and get the room ID
+        await postRoomDetail(roomForm.roomName, idVilla, roomForm.bed, roomForm.bath, roomForm.price);
+
+        // for (const room_photo of roomPhotos) {
+        //   await postPhotoRoom(id, room_photo.file);
+        // }
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   const handleSubmit = (e: any) => {
@@ -285,10 +306,10 @@ function CreateVilla() {
     setSelectedFacilities(updatedFacilities);
   };
 
-  const removeRoomForm = (index: any) => {
-    setRoomCount(roomCount - 1);
-    // You may also need to remove any corresponding data from your state variables
-  };
+  // const removeRoomForm = (index: any) => {
+  //   setRoomCount(roomCount - 1);
+  //   // You may also need to remove any corresponding data from your state variables
+  // };
   return (
     <>
       <div className='fixed top-0 right-0 z-50'>
@@ -558,6 +579,104 @@ function CreateVilla() {
                 </div>
               </div>
             </>
+            {roomForms.map((roomForm, index) => (
+              <div key={index} className='mt-6'>
+                <>
+                  <div>
+                    <label className='text-medium  text-gray-900 mr-2'>
+                      Room name<span className='text-orange-500'>*</span>
+                    </label>
+                    <input
+                      onChange={(e) => {
+                        const updatedForms = [...roomForms];
+                        updatedForms[index].roomName = e.target.value;
+                        setRoomForms(updatedForms);
+                      }}
+                      value={roomForm.roomName}
+                      type='text'
+                      id='roomName'
+                      className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                      placeholder='Example : Double Standard'
+                      required
+                    ></input>
+                  </div>
+                  <div className='flex gap-2'>
+                    <div className='w-full'>
+                      <label className='text-medium  text-gray-900 mr-2'>
+                        Bed<span className='text-orange-500'>*</span>
+                      </label>
+                      <input
+                        onChange={(e) => {
+                          const updatedForms = [...roomForms];
+                          updatedForms[index].bed = parseInt(e.target.value);
+                          setRoomForms(updatedForms);
+                        }}
+                        type='number'
+                        id='roomBed'
+                        className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                        required
+                      ></input>
+                    </div>
+                    <div className='w-full'>
+                      <label className='text-medium  text-gray-900 mr-2'>
+                        Bathroom<span className='text-orange-500'>*</span>
+                      </label>
+                      <input
+                        onChange={(e) => {
+                          const updatedForms = [...roomForms];
+                          updatedForms[index].bath = parseInt(e.target.value);
+                          setRoomForms(updatedForms);
+                        }}
+                        type='number'
+                        id='roomBath'
+                        className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                        required
+                      ></input>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className='text-medium  text-gray-900 mr-2'>
+                      Price<span className='text-orange-500'>*</span>
+                    </label>
+                    <input
+                      onChange={(e) => {
+                        const updatedForms = [...roomForms];
+                        updatedForms[index].price = parseInt(e.target.value);
+                        setRoomForms(updatedForms);
+                      }}
+                      type='number'
+                      id='roomPrice'
+                      className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                      placeholder='Example : 275000'
+                      required
+                    ></input>
+                  </div>
+
+                  {/* Room Photo */}
+                  <div className='mb-6'>
+                    <label className='block mb-2 text-medium font-medium text-gray-900 mt-3'>
+                      Add Room Photos<span className='text-orange-500'>*</span>
+                    </label>
+                    <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
+                      <div
+                        {...getRootPropsRoom()}
+                        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActiveRoom ? 'border-blue-500' : 'border-gray-300'}`}
+                      >
+                        <input {...getInputPropsRoom()} disabled={roomPhotos.length >= 6} />
+                        <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
+                      </div>
+                      {Roomthumbs.length > 0 && <div className='flex flex-wrap mt-4'>{Roomthumbs}</div>}
+                      {roomPhotos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
+                    </div>
+                  </div>
+                </>
+                {/* Delete button */}
+                <button onClick={() => removeRoomForm(index)} className='mt-2 px-4 py-2 bg-red-500 text-white rounded-lg'>
+                  Delete
+                </button>
+              </div>
+            ))}
             <>
               {Array.from({ length: roomCount - 1 }, (_, index) => (
                 <div key={index} className='mt-6'>
