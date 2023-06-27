@@ -20,6 +20,11 @@ interface RoomPhoto {
   preview: string;
 }
 
+interface RoomPhotoNew {
+  file: File;
+  preview: string;
+}
+
 function CreateVilla() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -34,14 +39,16 @@ function CreateVilla() {
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [roomPhotos, setRoomPhotos] = useState<RoomPhoto[]>([]);
+  const [roomPhotosNew, setRoomPhotosNew] = useState<RoomPhotoNew[]>([]);
+
   const [roomName, setRoomName] = useState('');
   const [bed, setBed] = useState(0);
   const [bath, setBath] = useState(0);
   const [price, setPrice] = useState(0);
-  const [roomCount, setRoomCount] = useState(1);
+  // const [roomCount, setRoomCount] = useState(1);
   const [range, setRange] = React.useState([300000, 500000]);
-  const [rooms, setRooms] = useState([]); // State variable to store room data
-  const [roomForms, setRoomForms] = useState([{ roomName: '', bed: 0, bath: 0, price: 0, roomPhotos: [] }]);
+  // const [rooms, setRooms] = useState([]); // State variable to store room data
+  const [roomForms, setRoomForms] = useState<{ roomName: string; bed: number; bath: number; price: number; roomPhotosNew: RoomPhotoNew[] }[]>([{ roomName: '', bed: 0, bath: 0, price: 0, roomPhotosNew: [] }]);
 
   function handleChanges(event: any, newValue: any) {
     setRange(newValue);
@@ -50,7 +57,7 @@ function CreateVilla() {
   const navigate = useNavigate();
 
   const addRoomForm = () => {
-    setRoomForms([...roomForms, { roomName: '', bed: 0, bath: 0, price: 0, roomPhotos: [] }]);
+    setRoomForms([...roomForms, { roomName: '', bed: 0, bath: 0, price: 0, roomPhotosNew: [] }]);
   };
 
   const removeRoomForm = (index: any) => {
@@ -147,6 +154,53 @@ function CreateVilla() {
     </div>
   ));
 
+  // form room new
+  const onDropRoomNew = useCallback((acceptedFiles: File[]) => {
+    const newPhotos: RoomPhotoNew[] = acceptedFiles.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setRoomPhotosNew((prevPhotos) => [...prevPhotos, ...newPhotos].slice(0, 6));
+  }, []);
+
+  const deleteRoomPhotoNew = (formIndex: number, photoIndex: number) => {
+    const updatedForms = [...roomForms];
+    const updatedPhotos = [...updatedForms[formIndex].roomPhotosNew];
+    updatedPhotos.splice(photoIndex, 1);
+    updatedForms[formIndex].roomPhotosNew = updatedPhotos;
+    setRoomForms(updatedForms);
+  };
+
+  const {
+    getRootProps: getRootPropsRoomNew,
+    getInputProps: getInputPropsRoomNew,
+    isDragActive: isDragActiveRoomNew,
+  } = useDropzone({
+    onDrop: onDropRoomNew,
+    accept: {
+      'image/*': [],
+    },
+    minSize: 0,
+    maxSize: 5242880, // 5MB in bytes
+    multiple: true,
+    disabled: roomPhotosNew.length >= 6,
+  });
+
+  // const RoomThumbs = roomPhotosNew.map((photo, index) => (
+  //   <div key={index} className='w-32 h-32 m-2 relative z-10'>
+  //     <img src={photo.preview} alt={`Preview ${index}`} className='w-full h-full object-cover' />
+  //     <div className='absolute top-0 right-0 p-2'>
+  //       <FontAwesomeIcon
+  //         icon={faTrash}
+  //         size={'2xs'}
+  //         onClick={() => deleteRoomPhotoNew(index)}
+  //         className='bg-black text-white p-2 rounded-md hover:bg-[#FF7400] duration-100 transition transform scale-105 hover:scale-125 cursor-pointer absolute top-0 right-1 lg:right-0 mt-2 mr-3'
+  //       />
+  //     </div>
+  //   </div>
+  // ));
+
   const handleLocationSelected = (lat: number, lng: number) => {
     setLatitude(lat);
     setLongitude(lng);
@@ -204,11 +258,11 @@ function CreateVilla() {
       // Loop through each room form data
       for (const roomForm of roomForms) {
         // Post room detail and get the room ID
-        await postRoomDetail(roomForm.roomName, idVilla, roomForm.bed, roomForm.bath, roomForm.price);
+        const { id } = await postRoomDetail(roomForm.roomName, idVilla, roomForm.bed, roomForm.bath, roomForm.price);
 
-        // for (const room_photo of roomPhotos) {
-        //   await postPhotoRoom(id, room_photo.file);
-        // }
+        for (const room_photo of roomPhotosNew) {
+          await postPhotoRoom(id, room_photo.file);
+        }
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -579,6 +633,8 @@ function CreateVilla() {
                 </div>
               </div>
             </>
+
+            {/* New Room */}
             {roomForms.map((roomForm, index) => (
               <div key={index} className='mt-6'>
                 <>
@@ -658,16 +714,31 @@ function CreateVilla() {
                     <label className='block mb-2 text-medium font-medium text-gray-900 mt-3'>
                       Add Room Photos<span className='text-orange-500'>*</span>
                     </label>
-                    <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
+                    <div className='border p-5 text-gray-900 text-sm rounded-lg focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full border-orange-300 dark:placeholder-gray-400'>
                       <div
-                        {...getRootPropsRoom()}
-                        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActiveRoom ? 'border-blue-500' : 'border-gray-300'}`}
+                        {...getRootPropsRoomNew()}
+                        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActiveRoomNew ? 'border-blue-500' : 'border-gray-300'}`}
                       >
-                        <input {...getInputPropsRoom()} disabled={roomPhotos.length >= 6} />
-                        <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
+                        <input {...getInputPropsRoomNew()} disabled={roomForm.roomPhotosNew.length >= 6} />
+                        <p>Drag and drop some files here, or click to select files (Max 6 photos)</p>
                       </div>
-                      {Roomthumbs.length > 0 && <div className='flex flex-wrap mt-4'>{Roomthumbs}</div>}
-                      {roomPhotos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
+                      <div className='flex flex-wrap mt-4'>
+                        {roomForm.roomPhotosNew.map((photo, photoIndex) => (
+                          <div key={photoIndex} className='w-32 h-32 m-2 relative z-10'>
+                            <img src={photo.preview} alt={`Preview ${photoIndex}`} className='w-full h-full object-cover' />
+                            <div className='absolute top-0 right-0 p-2'>
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                size={'2xs'}
+                                onClick={() => deleteRoomPhotoNew(index, photoIndex)}
+                                className='bg-black text-white p-2 rounded-md hover:bg-[#FF7400] duration-100 transition transform scale-105 hover:scale-125 cursor-pointer absolute top-0 right-1 lg:right-0 mt-2 mr-3'
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {/* {RoomThumbs.length > 0 && <div className='flex flex-wrap mt-4'>{RoomThumbs}</div>} */}
+                      {roomPhotosNew.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
                     </div>
                   </div>
                 </>
@@ -677,90 +748,7 @@ function CreateVilla() {
                 </button>
               </div>
             ))}
-            <>
-              {Array.from({ length: roomCount - 1 }, (_, index) => (
-                <div key={index} className='mt-6'>
-                  <div className='mb-6 mt-10'>
-                    <div>
-                      <label className='text-medium  text-gray-900 mr-2'>
-                        Room name<span className='text-orange-500'>*</span>
-                      </label>
-                      <input
-                        onChange={(e) => setRoomName(e.target.value)}
-                        type='text'
-                        id='roomName'
-                        className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
-                        placeholder='Example : Double Standard'
-                        required
-                      ></input>
-                    </div>
-                    <div className='flex gap-2'>
-                      <div className='w-full'>
-                        <label className='text-medium  text-gray-900 mr-2'>
-                          Bed<span className='text-orange-500'>*</span>
-                        </label>
-                        <input
-                          onChange={(e) => setBed(parseInt(e.target.value))}
-                          type='number'
-                          id='roomBed'
-                          className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
-                          required
-                        ></input>
-                      </div>
-                      <div className='w-full'>
-                        <label className='text-medium  text-gray-900 mr-2'>
-                          Bathroom<span className='text-orange-500'>*</span>
-                        </label>
-                        <input
-                          onChange={(e) => setBath(parseInt(e.target.value))}
-                          type='number'
-                          id='roomBath'
-                          className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
-                          required
-                        ></input>
-                      </div>
-                    </div>
 
-                    <div>
-                      <label className='text-medium  text-gray-900 mr-2'>
-                        Price<span className='text-orange-500'>*</span>
-                      </label>
-                      <input
-                        onChange={(e) => setPrice(parseInt(e.target.value))}
-                        type='number'
-                        id='roomPrice'
-                        className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
-                        placeholder='Example : 275000'
-                        required
-                      ></input>
-                    </div>
-
-                    {/* Room Photo */}
-                    <div className='mb-6'>
-                      <label className='block mb-2 text-medium font-medium text-gray-900 mt-3'>
-                        Add Room Photos<span className='text-orange-500'>*</span>
-                      </label>
-                      <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
-                        <div
-                          {...getRootPropsRoom()}
-                          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActiveRoom ? 'border-blue-500' : 'border-gray-300'}`}
-                        >
-                          <input {...getInputPropsRoom()} disabled={roomPhotos.length >= 6} />
-                          <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
-                        </div>
-                        {Roomthumbs.length > 0 && <div className='flex flex-wrap mt-4'>{Roomthumbs}</div>}
-                        {roomPhotos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Delete button */}
-                  <button onClick={() => removeRoomForm(index)} className='mt-2 px-4 py-2 bg-red-500 text-white rounded-lg'>
-                    Delete
-                  </button>
-                </div>
-              ))}
-            </>
             <div className='flex justify-end'>
               <div onClick={addRoomForm} className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer'>
                 Add Room +

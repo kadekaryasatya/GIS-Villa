@@ -186,7 +186,7 @@ export default function VillaDetailPages() {
                   <div className='grid grid-cols-2 gap-2 py-5 justify-between'>
                     {villa.room?.map((item: any) => (
                       <div key={item.id} className='shadow-lg border '>
-                        <div className='w-[250px]'>
+                        <div className='w-full'>
                           <Slider {...settings}>
                             {item.expand['room_photo(room)']?.map((photo: any) => (
                               <div key={photo.id}>

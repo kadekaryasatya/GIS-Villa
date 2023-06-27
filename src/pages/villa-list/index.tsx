@@ -3,9 +3,11 @@ import VillaList from '../../components/VillaList';
 
 export default function VillaListPages() {
   return (
-    <div className='App py-5 px-[100px] max-w-[1366px] mx-auto'>
-      <SearchBar />
-      <VillaList />
-    </div>
+    <>
+      <div></div>
+      <div className=''>
+        <VillaList />
+      </div>
+    </>
   );
 }
