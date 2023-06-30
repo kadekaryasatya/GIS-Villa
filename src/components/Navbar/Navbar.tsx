@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
     <div className='flex justify-between py-5  px-10 shadow bg-orange-50'>
       <Link to='/' className='flex gap-1 items-center'>
-        <img src='/icons/ezvlogo.ico' alt='logo' className=' lg:h-10 lg:w-[70px] w-[70px] h-8 cursor-pointer' />
+        <img src='/icons/ezvlogo.ico' className='h-8 mr-3 cursor-pointer' alt='EZV Logo' />
       </Link>
       <div className='relative z-10 cursor-pointer'>
         <img src='/icons/Hamburger.png' alt='hamburger' className='h-7 cursor-pointer' onClick={toggleMenu} />
