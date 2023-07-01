@@ -8,6 +8,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { toast, Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
+import ModalCreate from '../../components/Modal/Modal';
 const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu']; // Example city data
 
 interface Photo {
@@ -364,8 +365,25 @@ function CreateVilla() {
   //   setRoomCount(roomCount - 1);
   //   // You may also need to remove any corresponding data from your state variables
   // };
+
+  const [showModal, setShowModal] = useState(true);
+
+  // useEffect(() => {
+  //   // Code to run when the component mounts
+  //   // You can customize this according to your needs
+
+  //   // Example: hide the modal after 3 seconds
+  //   setTimeout(() => {
+  //     setShowModal(false);
+  //   }, 3000);
+  // }, []);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
   return (
     <>
+      {showModal && <ModalCreate closeModal={closeModal} />}
       <div className='fixed top-0 right-0 z-50'>
         <Toaster position='top-right' />
       </div>
