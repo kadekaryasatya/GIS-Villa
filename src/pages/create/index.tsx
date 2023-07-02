@@ -9,7 +9,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
 import ModalCreate from '../../components/Modal/Modal';
-const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu']; // Example city data
+const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu', 'Tabanan', 'Singaraja', 'Klungkung', 'Gianyar']; // Example city data
 
 interface Photo {
   file: File;

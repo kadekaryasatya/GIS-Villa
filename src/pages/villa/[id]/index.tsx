@@ -6,7 +6,7 @@ import Badge from '../../../components/Badge/Badge';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBath, faBed } from '@fortawesome/free-solid-svg-icons';
+import { faBaby, faBath, faBed, faChild, faDog, faPeopleGroup, faSmoking } from '@fortawesome/free-solid-svg-icons';
 import BoxInfo from '../../../components/BoxInfo/BoxInfo';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -168,8 +168,74 @@ export default function VillaDetailPages() {
                   <h1 className='text-2xl font-semibold mt-5'>House Rules </h1>
                   <div className='flex-col gap-2 mb-5 mt-3'>
                     {villa.house_rules.map((item: any) => (
-                      <div key={item.expand.house_rules_detail.id} className=' bg-white-50 px-3 bg-white border shadow my-1'>
-                        {item.allowed ? <h1 className='text-lg'>{item.expand.house_rules_detail.name}</h1> : <h1 className='text-lg line-through'>{item.expand.house_rules_detail.name}</h1>}
+                      <div key={item.expand.house_rules_detail.id} className=' bg-white-50  bg-white my-1'>
+                        {item.allowed ? (
+                          <h1 className='text-lg'>
+                            {item.expand.house_rules_detail.name === 'Gatherings allowed' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faPeopleGroup} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                            {item.expand.house_rules_detail.name === 'Smoking allowed' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faSmoking} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                            {item.expand.house_rules_detail.name === 'Pets allowed' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faDog} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                            {item.expand.house_rules_detail.name === 'Suitable for infants (under 2 years)' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faBaby} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                            {item.expand.house_rules_detail.name === 'Children friendly home (2-12 years)' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faChild} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                          </h1>
+                        ) : (
+                          <h1 className='text-lg '>
+                            {item.expand.house_rules_detail.name === 'Gatherings allowed' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faPeopleGroup} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p className='line-through'>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                            {item.expand.house_rules_detail.name === 'Smoking allowed' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faSmoking} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p className='line-through'>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                            {item.expand.house_rules_detail.name === 'Pets allowed' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faDog} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p className='line-through'>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                            {item.expand.house_rules_detail.name === 'Suitable for infants (under 2 years)' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faBaby} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p className='line-through'>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                            {item.expand.house_rules_detail.name === 'Children friendly home (2-12 years)' && (
+                              <div className='flex gap-2 items-center shadow-lg py-2 px-2'>
+                                <FontAwesomeIcon icon={faChild} style={{ width: '30px', height: '30px', color: 'orange' }} className='items-center' />
+                                <p className='line-through'>{item.expand.house_rules_detail.name}</p>
+                              </div>
+                            )}
+                          </h1>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -212,6 +278,7 @@ export default function VillaDetailPages() {
                               {item.price_per_night.toLocaleString('id-ID', {
                                 style: 'currency',
                                 currency: 'IDR',
+                                minimumFractionDigits: 0,
                               })}
                               <span className='text-sm text-black ml-1'> /night</span>
                             </p>

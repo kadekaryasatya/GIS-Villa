@@ -31,7 +31,6 @@ async function getVillaDetail(id: any): Promise<IVilla> {
   const record = await pb.collection('villa').getOne(id, {
     expand: 'villa_photos(villa),category(villa).detail_category,house_rules(villa).house_rules_detail,room(villa).room_photo(room),facilities(villa).facilities_name',
   });
-  console.log('record :>> ', record);
 
   const villa: IVilla = {
     id: record.id,
@@ -39,6 +38,7 @@ async function getVillaDetail(id: any): Promise<IVilla> {
     description: record.description,
     location: record.location,
     price: record.price,
+    price_end: record.price_end,
     lat: record.latitude,
     lng: record.longitude,
     photo: record.expand['villa_photos(villa)'],
@@ -192,4 +192,76 @@ const postPhotoRoom = async (idRoom: string, file: File) => {
   return formData;
 };
 
-export { getVillaList, getVillaDetail, postVillaDetail, postCategoryVilla, getCategoryList, getHouseRulesList, getFacilitiesList, deleteVilla, postPhotoRoom, postHouseRules, postFacilitiesVilla, postPhotoVilla, postRoomDetail };
+//Villa Update
+async function updateVillaName(id: any, name: any) {
+  const data = {
+    name: name,
+  };
+
+  const record = await pb.collection('villa').update(id, data);
+
+  return record;
+}
+
+async function updateVillaDescription(id: any, description: any) {
+  const data = {
+    description: description,
+  };
+
+  const record = await pb.collection('villa').update(id, data);
+
+  return record;
+}
+
+async function updateVillaLocation(id: any, location: any) {
+  const data = {
+    location: location,
+  };
+
+  const record = await pb.collection('villa').update(id, data);
+
+  return record;
+}
+
+async function updateVillaPrice(id: any, price: any, price_end: any) {
+  const data = {
+    price: price,
+    price_end: price_end,
+  };
+
+  const record = await pb.collection('villa').update(id, data);
+
+  return record;
+}
+
+async function updateVillaCategory(idCategory: any, id: any, selectedCategories: any) {
+  const data = {
+    villa: id,
+    detail_category: selectedCategories,
+  };
+
+  await pb.collection('category').update(idCategory, data);
+
+  return data;
+}
+
+export {
+  getVillaList,
+  getVillaDetail,
+  postVillaDetail,
+  postCategoryVilla,
+  getCategoryList,
+  getHouseRulesList,
+  getFacilitiesList,
+  deleteVilla,
+  postPhotoRoom,
+  postHouseRules,
+  postFacilitiesVilla,
+  postPhotoVilla,
+  postRoomDetail,
+  updateVillaName,
+  updateVillaLocation,
+  updateVillaPrice,
+  updateVillaCategory,
+  updateVillaDescription,
+};
