@@ -15,7 +15,7 @@ export default function Navbar() {
       <Link to='/' className='flex gap-1 items-center'>
         <img src='/icons/ezvlogo.ico' className='h-8 mr-3 cursor-pointer' alt='EZV Logo' />
       </Link>
-      <div className='flex gap-5'>
+      <div className='flex gap-5 items-center'>
         <Link
           to='/create'
           className=' text-sm font-semibold capitalize text-orange-500 border rounded-[5px] border-orange-500 mr-2 py-1 px-3 scale-90 hover:scale-100 hover:bg-orange-500 hover:text-white duration-100 transition transform ease-in hover:border-none '
@@ -23,7 +23,7 @@ export default function Navbar() {
           <div>List your property</div>
         </Link>
         <div className='relative z-10 cursor-pointer'>
-          <img src='/icons/Hamburger.png' alt='hamburger' className='h-7 cursor-pointer' onClick={toggleMenu} />
+          <img src='/icons/Hamburger.png' alt='hamburger' className='h-6 cursor-pointer' onClick={toggleMenu} />
 
           <Transition
             show={isOpen}

@@ -190,7 +190,7 @@ export default function VillaDetailPages() {
                           <Slider {...settings}>
                             {item.expand['room_photo(room)']?.map((photo: any) => (
                               <div key={photo.id}>
-                                <img src={`https://gis-api.pockethost.io/api/files/8vo79sa9oofehjs/` + photo.id + `/` + photo.path_room_photo} alt={item.name} className=' h-[150px] w-full shadow' />
+                                <img src={`https://gis-api.pockethost.io/api/files/8vo79sa9oofehjs/` + photo.id + `/` + photo.path_room_photo} alt={item.name} className=' h-[200px] w-full shadow' />
                               </div>
                             ))}
                           </Slider>
@@ -240,10 +240,14 @@ export default function VillaDetailPages() {
               </div>
             </>
           )}
-          <div className='mt-5 '>
-            <h1 className='text-2xl font-semibold mt-5 mb-3'>Location on Map </h1>
-            {villa && <MapVilla data={villa} />}
-          </div>
+          {villa ? (
+            <div className='mt-5 '>
+              <h1 className='text-2xl font-semibold mt-5 mb-3'>Location on Map </h1>
+              <MapVilla data={villa} />
+            </div>
+          ) : (
+            <Skeleton height={180} className='mt-2' />
+          )}
         </div>
       </div>
     </>

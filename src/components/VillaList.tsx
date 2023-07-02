@@ -4,7 +4,8 @@ import { getVillaList } from '../utils/api';
 import { IVilla } from '../utils/data';
 import Slider from 'react-slick';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faMagnifyingGlassLocation, faMapLocationDot, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faMagnifyingGlassLocation, faMapLocationDot, faPlusCircle, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { Link as ScrollLink } from 'react-scroll';
 
 export default function VillaList(): JSX.Element {
   const [villaList, setVillaList] = useState<Array<IVilla>>([]);
@@ -52,31 +53,39 @@ export default function VillaList(): JSX.Element {
         </div>
         <div className='flex justify-between mb-24 px-[100px] max-w-[1366px] mx-auto gap-2 '>
           <div className='p-8  w-full shadow-lg  rounded-lg'>
-            <FontAwesomeIcon icon={faHome} style={{ width: '50px', height: '50px', color: 'orange' }} className='mb-5' />
-            <h1 className='font-semibold text-xl'>Find your dream villa</h1>
-            <p className='text-gray-500 mt-5 '>Experience the efficiency and seamless </p>
-            <p className='text-gray-500  '>navigation of our website as you explore</p>
-            <p className='text-gray-500  '>and compare various villas.</p>
+            <ScrollLink to='popular' smooth duration={500} offset={-50} className='cursor-pointer'>
+              <FontAwesomeIcon icon={faHome} style={{ width: '50px', height: '50px', color: 'orange' }} className='mb-5' />
+              <h1 className='font-semibold text-xl'>Find your dream villa</h1>
+              <p className='text-gray-500 mt-5 '>Experience the efficiency and seamless </p>
+              <p className='text-gray-500  '>navigation of our website as you explore</p>
+              <p className='text-gray-500  '>and compare various villas.</p>
+            </ScrollLink>
           </div>
+
           <div className='p-8   w-full shadow-lg  rounded-lg '>
-            <FontAwesomeIcon icon={faMapLocationDot} style={{ width: '50px', height: '50px', color: 'orange' }} className='mb-5' />
-            <h1 className='font-semibold text-xl'>Explore villa on map</h1>
-            <p className='text-gray-500 mt-5 '>Easily explore villas on our property website</p>
-            <p className='text-gray-500  '> through an interactive map feature, allowing </p>
-            <p className='text-gray-500  '>you to visualize their locations at a glance.</p>
+            <ScrollLink to='maps' smooth duration={500} offset={-50} className='cursor-pointer'>
+              <FontAwesomeIcon icon={faMapLocationDot} style={{ width: '50px', height: '50px', color: 'orange' }} className='mb-5' />
+              <h1 className='font-semibold text-xl'>Explore villa on map</h1>
+              <p className='text-gray-500 mt-5 '>Easily explore villas on our property website</p>
+              <p className='text-gray-500  '> through an interactive map feature, allowing </p>
+              <p className='text-gray-500  '>you to visualize their locations at a glance.</p>
+            </ScrollLink>
           </div>
+
           <div className='p-8   w-full shadow-lg  rounded-lg'>
-            <FontAwesomeIcon icon={faPlusCircle} style={{ width: '50px', height: '50px', color: 'orange' }} className='mb-5' />
-            <h1 className='font-semibold text-xl'>Create your own villa</h1>
-            <p className='text-gray-500 mt-5 '>Unleash your creativity and design your own</p>
-            <p className='text-gray-500  '> villa, and customizing every detail to match</p>
-            <p className='text-gray-500  '> your unique vision.</p>
+            <ScrollLink to='createvilla' smooth duration={500} offset={-50} className='cursor-pointer'>
+              <FontAwesomeIcon icon={faPlusCircle} style={{ width: '50px', height: '50px', color: 'orange' }} className='mb-5' />
+              <h1 className='font-semibold text-xl'>Create your own villa</h1>
+              <p className='text-gray-500 mt-5 '>Unleash your creativity and design your own</p>
+              <p className='text-gray-500  '> villa, and customizing every detail to match</p>
+              <p className='text-gray-500  '> your unique vision.</p>
+            </ScrollLink>
           </div>
         </div>
 
         {/* Popular Villa */}
-        <div className='bg-gray-50'>
-          <div className='px-[100px] max-w-[1366px] mx-auto py-10'>
+        <div className='bg-gray-50' id='popular'>
+          <div className='px-[100px] max-w-[1366px] mx-auto py-16'>
             <h1 className='text-lg font-semibold text-orange-500 '>See our</h1>
             <h1 className='text-2xl font-semibold mb-5'>Popular villa</h1>
             <div className='grid lg:grid-cols-4 grid-cols-2 gap-5 '>
@@ -96,10 +105,7 @@ export default function VillaList(): JSX.Element {
                         <img src='/icons/location.png' alt='location' className='h-4 cursor-pointer' />
                         <p className='text-sm'>{item.location}</p>
                       </div>
-                      <p
-                        className='text-sm font-semibold text-orange-500 mt-1
-          '
-                      >
+                      <p className='text-sm font-semibold text-orange-500 mt-1'>
                         {item.price.toLocaleString('id-ID', {
                           style: 'currency',
                           currency: 'IDR',
@@ -116,12 +122,12 @@ export default function VillaList(): JSX.Element {
         </div>
 
         {/* Maps */}
-        <div className='mt-24 mb-14 px-[100px] max-w-[1366px] mx-auto'>
+        <div className='mt-32 mb-32 px-[100px] max-w-[1366px] mx-auto' id='maps'>
           <div className='justify-between flex gap-20'>
-            <div className='w-1/2  '>
-              <img src='/maps.png' alt='background' className='w-full h-[300px] rounded-xl object-cover shadow-2xl ' />
+            <div className='w-2/3  '>
+              <img src='/maps.png' alt='background' className='w-full h-[400px] rounded-xl shadow-2xl border p-1' />
             </div>
-            <div className='w-1/2 flex-col flex gap-5 py-10'>
+            <div className='w-1/3 flex-col flex gap-5 py-10 mt-14'>
               <div>
                 <h1 className='text-3xl font-semibold '>Explore Villa on map</h1>
                 <h1 className='text-gray-500 mt-5 text-lg'>Search for villas around you based by the markers on the map</h1>
@@ -133,6 +139,30 @@ export default function VillaList(): JSX.Element {
                 <FontAwesomeIcon icon={faMagnifyingGlassLocation} className='text-orange hover:text-white' />
                 <div>Go</div>
               </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Create */}
+        <div className='bg-gray-50 mb-20' id='createvilla'>
+          <div className=' py-40 px-[100px] max-w-[1366px] mx-auto' id='maps'>
+            <div className='justify-between flex gap-20'>
+              <div className='w-1/3 flex-col flex gap-5 py-10'>
+                <div>
+                  <h1 className='text-3xl font-semibold '>Create your own villa</h1>
+                  <h1 className='text-gray-500 mt-5 text-lg'>Tell us all about your stunning villa! The property villa information form below allows you to highlight its amenities and charm.</h1>
+                </div>
+                <Link
+                  to='/create'
+                  className=' text-xl font-semibold capitalize text-orange-500 border rounded-[5px] border-orange-500  py-2  scale-90 hover:scale-100 hover:bg-orange-500 hover:text-white duration-100 transition transform ease-in hover:border-none w-[150px] flex justify-center gap-2 items-center'
+                >
+                  <FontAwesomeIcon icon={faPlusCircle} className='text-orange hover:text-white' />
+                  <div>Create</div>
+                </Link>
+              </div>
+              <div className='w-2/3  '>
+                <img src='/createImage.png' alt='background' className='w-full h-[300px] rounded-xl object-cover shadow-2xl ' />
+              </div>
             </div>
           </div>
         </div>
