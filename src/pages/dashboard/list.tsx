@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { IVilla } from '../../utils/data';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Footer from '../../components/Footer/Footer';
 const ITEMS_PER_PAGE = 5; // Number of items to display per page
 
 function Listing(): JSX.Element {
@@ -64,7 +65,7 @@ function Listing(): JSX.Element {
 
   return (
     <div>
-      <div className='relative overflow-x-auto shadow-md sm:rounded-lg py-5 px-[50px] max-w-[1366px] mx-auto mt-5 mb-5'>
+      <div className='relative overflow-x-auto shadow-md sm:rounded-lg py-5 px-[50px] max-w-[1366px] mx-auto mt-5 mb-20'>
         <div className='flex justify-between mb-5'>
           <h1 className='text-2xl font-semibold '>Your Listings</h1>
           <a
@@ -143,6 +144,7 @@ function Listing(): JSX.Element {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

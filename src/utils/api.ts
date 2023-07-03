@@ -234,6 +234,17 @@ async function updateVillaPrice(id: any, price: any, price_end: any) {
   return record;
 }
 
+async function updateVillaMaps(id: any, latitude: any, longitude: any) {
+  const data = {
+    latitude: latitude,
+    longitude: longitude,
+  };
+
+  const record = await pb.collection('villa').update(id, data);
+
+  return record;
+}
+
 async function updateVillaCategory(idCategory: any, id: any, selectedCategories: any) {
   const data = {
     villa: id,
@@ -264,4 +275,5 @@ export {
   updateVillaPrice,
   updateVillaCategory,
   updateVillaDescription,
+  updateVillaMaps,
 };

@@ -10,48 +10,33 @@ function Footer() {
               <img src='/icons/ezvlogo.ico' className='h-8 mr-3' alt='EZV Logo' />
             </a>
           </div>
-          <div className='grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3'>
+          <div className='grid grid-cols-2 lg:gap-20  gap-6 sm:grid-cols-2'>
             <div>
-              <h2 className='mb-6 text-sm font-semibold text-gray-900 uppercase '>Resources</h2>
+              <h2 className='mb-6 text-sm font-semibold text-gray-900 uppercase '>Menu</h2>
               <ul className='text-gray-600 dark:text-gray-400 font-medium'>
                 <li className='mb-4'>
-                  <a href='https://flowbite.com/' className='hover:underline'>
-                    Flowbite
+                  <a href='/' className='hover:underline'>
+                    Home
                   </a>
                 </li>
                 <li>
-                  <a href='https://tailwindcss.com/' className='hover:underline'>
-                    Tailwind CSS
+                  <a href='/dashboard/list' className='hover:underline'>
+                    Dashboard
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h2 className='mb-6 text-sm font-semibold text-gray-900 uppercase '>Follow us</h2>
+              <h2 className='mb-6 text-sm font-semibold text-gray-900 uppercase '>Service</h2>
               <ul className='text-gray-600 dark:text-gray-400 font-medium'>
                 <li className='mb-4'>
-                  <a href='https://github.com/themesberg/flowbite' className='hover:underline '>
-                    Github
+                  <a href='/create' className='hover:underline'>
+                    Create
                   </a>
                 </li>
                 <li>
-                  <a href='https://discord.gg/4eeurUVvTy' className='hover:underline'>
-                    Discord
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h2 className='mb-6 text-sm font-semibold text-gray-900 uppercase '>Legal</h2>
-              <ul className='text-gray-600 dark:text-gray-400 font-medium'>
-                <li className='mb-4'>
-                  <a href='#' className='hover:underline'>
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='hover:underline'>
-                    Terms &amp; Conditions
+                  <a href='/maps' className='hover:underline'>
+                    Maps
                   </a>
                 </li>
               </ul>
@@ -62,7 +47,7 @@ function Footer() {
         <div className='sm:flex sm:items-center sm:justify-between'>
           <span className='text-sm text-gray-500 sm:text-center dark:text-gray-400'>
             © 2023{' '}
-            <a href='https://flowbite.com/' className='hover:underline'>
+            <a href='/' className='hover:underline'>
               EZV™
             </a>
             . All Rights Reserved.

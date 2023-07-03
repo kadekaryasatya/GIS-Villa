@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ICategory, IVilla } from '../../utils/data';
-import { getCategoryList, getVillaDetail, updateVillaCategory, updateVillaDescription, updateVillaLocation, updateVillaName, updateVillaPrice } from '../../utils/api';
+import { getCategoryList, getVillaDetail, updateVillaCategory, updateVillaDescription, updateVillaLocation, updateVillaMaps, updateVillaName, updateVillaPrice } from '../../utils/api';
 import Badge from '../../components/Badge/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBath, faBed } from '@fortawesome/free-solid-svg-icons';
 import { toast, Toaster } from 'react-hot-toast';
 import MapVilla from '../../components/Map/MapVilla';
 import Slider from '@mui/material/Slider';
+import MapComponent from '../../components/Map/Maps';
 const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu', 'Tabanan', 'Singaraja', 'Klungkung', 'Gianyar']; // Example city data
 
 const VillaDetailEdit = () => {
@@ -35,8 +36,6 @@ const VillaDetailEdit = () => {
       setImageUrls(urls);
     }
   }, [villa]);
-
-  console.log('villa.photo :>> ', villa?.photo);
 
   //Edit Villa Name
   const [isEditing, setIsEditing] = useState(false);
@@ -126,19 +125,32 @@ const VillaDetailEdit = () => {
 
   //Edit location on Map
   const [isEditingMarker, setIsEditingMarker] = useState(false);
+  const [latitude, setLatitude] = useState(villa?.lat);
+  const [longitude, setLongitude] = useState(villa?.lng);
 
   const handleEditClickMarker = () => {
     setIsEditingMarker(true);
   };
 
-  const handleSaveClickMarker = () => {
-    // Perform save action here
-    setIsEditingMarker(false);
+  const handleSaveClickMarker = async () => {
+    try {
+      await updateVillaMaps(id, latitude, longitude);
+      setIsEditingMarker(false);
+      toast.success('Successfully updated villa location on Map');
+      window.location.reload(); // Reload the page after saving
+    } catch (error) {
+      toast.error('Error when saving villa location on Map');
+    }
     // Additional logic to handle the saved changes
   };
 
   const handleCancelClickMarker = () => {
     setIsEditingMarker(false);
+  };
+
+  const handleLocationSelected = (lat: number, lng: number) => {
+    setLatitude(lat);
+    setLongitude(lng);
   };
 
   //Edit Price
@@ -317,8 +329,9 @@ const VillaDetailEdit = () => {
                   <label className='block text-medium font-medium text-gray-900'>
                     Location on Map<span className='text-orange-500'>:</span>
                   </label>
-                  <MapVilla data={villa} />
-                  <div className='flex '>
+                  <MapComponent onLocationSelected={handleLocationSelected} />
+
+                  <div className='flex mt-2'>
                     <button className='bg-green-500 text-white px-4 py-1 rounded-md mx-2' onClick={handleSaveClickMarker}>
                       Save
                     </button>
@@ -328,13 +341,16 @@ const VillaDetailEdit = () => {
                   </div>
                 </>
               ) : (
-                <div className='flex items-center gap-2'>
-                  <label className='block text-medium font-medium text-gray-900'>
-                    Location on Map<span className='text-orange-500'>:</span>
-                  </label>
-                  <button className='bg-blue-500 text-white px-4 py-1 rounded-md' onClick={handleEditClickMarker}>
-                    Edit
-                  </button>
+                <div className=' items-center gap-2'>
+                  <div className='flex gap-3 mb-2'>
+                    <label className='block text-medium font-medium text-gray-900'>
+                      Location on Map<span className='text-orange-500'>:</span>
+                    </label>
+                    <button className='bg-blue-500 text-white px-4 py-1 rounded-md' onClick={handleEditClickMarker}>
+                      Edit
+                    </button>
+                  </div>
+                  <MapVilla data={villa} />
                 </div>
               )}
             </div>

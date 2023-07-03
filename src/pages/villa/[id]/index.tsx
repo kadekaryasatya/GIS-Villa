@@ -12,6 +12,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import MapVilla from '../../../components/Map/MapVilla';
+import Footer from '../../../components/Footer/Footer';
 
 export default function VillaDetailPages() {
   const settings = {
@@ -50,7 +51,7 @@ export default function VillaDetailPages() {
 
   return (
     <>
-      <div className='py-5 px-[50px] max-w-[1366px] mx-auto'>
+      <div className='py-5 px-[50px] max-w-[1366px] mx-auto mb-20'>
         <div className='container shadow-lg bg-white-50 py-5 px-5 mb-5 '>
           {/* Name  */}
           {villa ? (
@@ -317,6 +318,7 @@ export default function VillaDetailPages() {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 }
