@@ -8,6 +8,7 @@ import directionIcon from './marker1.png';
 import VillaInfo from './VillaInfo';
 import { Link } from 'react-router-dom';
 import 'leaflet-routing-machine';
+import { useState } from 'react';
 
 export default function MapVilla(props: { data: IVilla }) {
   const { data } = props;
@@ -24,25 +25,30 @@ export default function MapVilla(props: { data: IVilla }) {
     iconAnchor: [25, 50],
   });
 
-  const [position, setPosition] = useState<[number, number] | null>(null);
+  function ClickEvent() {
+    const [position, setPosition] = useState<[number, number] | null>(null);
 
-  const handleMapClick = (e: L.LeafletMouseEvent) => {
-    const { lat, lng } = e.latlng;
-    setPosition([lat, lng]);
-    onLocationSelected(lat, lng);
-  };
+    const handleMapClick = (e: L.LeafletMouseEvent, map: L.Map) => {
+      const { lat, lng } = e.latlng;
+      setPosition([lat, lng]);
+      const villaMarker = L.marker([data.lat, data.lng], { icon: locationIcon });
+      const destination = L.latLng(lat, lng);
+      L.Routing.control({
+        waypoints: [villaMarker.getLatLng(), destination],
+        routeWhileDragging: true,
+      }).addTo(map);
+    };
 
-  const AddMarkerToMap = () => {
-    useMapEvents({
-      click: (e) => handleMapClick(e),
+    const map = useMapEvents({
+      click: (e) => handleMapClick(e, map),
     });
 
     if (position) {
-      return <Marker position={position} icon={locationIcon} />;
+      return <Marker position={position} icon={directionMarkerIcon} />;
     }
 
     return null;
-  };
+  }
 
   return (
     <div className='h-[500px]'>
@@ -55,7 +61,7 @@ export default function MapVilla(props: { data: IVilla }) {
             </Link>
           </Popup>
         </Marker>
-        <AddMarkerToMap />
+        <ClickEvent />
       </MapContainer>
     </div>
   );
