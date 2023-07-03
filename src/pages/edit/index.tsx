@@ -8,7 +8,6 @@ import { faBath, faBed } from '@fortawesome/free-solid-svg-icons';
 import { toast, Toaster } from 'react-hot-toast';
 import MapVilla from '../../components/Map/MapVilla';
 import Slider from '@mui/material/Slider';
-import { colors } from '@mui/material';
 const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu', 'Tabanan', 'Singaraja', 'Klungkung', 'Gianyar']; // Example city data
 
 const VillaDetailEdit = () => {
@@ -36,6 +35,8 @@ const VillaDetailEdit = () => {
       setImageUrls(urls);
     }
   }, [villa]);
+
+  console.log('villa.photo :>> ', villa?.photo);
 
   //Edit Villa Name
   const [isEditing, setIsEditing] = useState(false);
@@ -211,8 +212,6 @@ const VillaDetailEdit = () => {
   const handleCancelClickCategory = () => {
     setIsEditingCategory(false);
   };
-
-  console.log('villa.category :>> ', villa?.category);
 
   return (
     <>
