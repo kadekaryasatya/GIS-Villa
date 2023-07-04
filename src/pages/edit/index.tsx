@@ -555,7 +555,7 @@ const VillaDetailEdit = () => {
             </div> */}
 
             {/* Photo */}
-            <div className='mb-6'>
+            {/* <div className='mb-6'>
               <div>
                 <label htmlFor='photo' className='block mb-2 text-medium font-medium text-gray-900'>
                   Photo<span className='text-orange-500'>:</span>
@@ -581,7 +581,7 @@ const VillaDetailEdit = () => {
                   <img alt='gallery' className='block h-full w-full rounded-lg object-cover object-center' src={imageUrls[5]} />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Description */}
             <div className='mb-6 mt-5 '>
