@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ICategory, IVilla } from '../../utils/data';
-import { getCategoryList, getVillaDetail, updateVillaCategory, updateVillaDescription, updateVillaLocation, updateVillaMaps, updateVillaName, updateVillaPrice } from '../../utils/api';
+import { getCategoryList, getVillaDetail, postPhotoRoom, postRoomDetail, updateVillaCategory, updateVillaDescription, updateVillaLocation, updateVillaMaps, updateVillaName, updateVillaPrice } from '../../utils/api';
 import Badge from '../../components/Badge/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBath, faBed } from '@fortawesome/free-solid-svg-icons';
+import { faBath, faBed, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { toast, Toaster } from 'react-hot-toast';
-import MapVilla from '../../components/Map/MapVilla';
 import Slider from '@mui/material/Slider';
 import MapComponent from '../../components/Map/Maps';
+import MapVillaEdit from '../../components/Map/MapVillaEdit';
+import { useDropzone } from 'react-dropzone';
 const cities = ['Denpasar', 'Kuta', 'Ubud', 'Seminyak', 'Canggu', 'Tabanan', 'Singaraja', 'Klungkung', 'Gianyar']; // Example city data
+
+interface RoomPhoto {
+  file: File;
+  preview: string;
+}
 
 const VillaDetailEdit = () => {
   const { id } = useParams();
@@ -225,6 +231,85 @@ const VillaDetailEdit = () => {
     setIsEditingCategory(false);
   };
 
+  //Add room
+
+  const [roomPhotos, setRoomPhotos] = useState<RoomPhoto[]>([]);
+  const [isAddRoom, setIsAddRoom] = useState(false);
+
+  const [roomName, setRoomName] = useState('');
+  const [bed, setBed] = useState(0);
+  const [bath, setBath] = useState(0);
+  const [price, setPrice] = useState(0);
+
+  const handleClickAddRoom = () => {
+    setIsAddRoom(true);
+  };
+
+  const handleSaveAddRoom = async () => {
+    try {
+      const createdRoom = await postRoomDetail(roomName, id, bed, bath, price);
+      const id_room = createdRoom.id;
+
+      for (const room_photo of roomPhotos) {
+        await postPhotoRoom(id_room, room_photo.file);
+      }
+      setIsAddRoom(false);
+      toast.success('Successfully Add new room');
+      window.location.reload(); // Reload the page after saving
+    } catch (error: any) {
+      toast.error('Error when add new Room');
+    }
+
+    // Additional logic to handle the saved changes
+  };
+
+  const handleCancelClickAddRoom = () => {
+    setIsAddRoom(false);
+  };
+
+  const onDropRoom = useCallback((acceptedFiles: File[]) => {
+    const newPhotos: RoomPhoto[] = acceptedFiles.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setRoomPhotos((prevPhotos) => [...prevPhotos, ...newPhotos].slice(0, 6));
+  }, []);
+
+  const {
+    getRootProps: getRootPropsRoom,
+    getInputProps: getInputPropsRoom,
+    isDragActive: isDragActiveRoom,
+  } = useDropzone({
+    onDrop: onDropRoom,
+    accept: {
+      'image/*': [],
+    },
+    minSize: 0,
+    maxSize: 5242880, // 5MB in bytes
+    multiple: true,
+    disabled: roomPhotos.length >= 6,
+  });
+  const deleteRoomPhoto = (index: number) => {
+    const updatedPhotos = [...roomPhotos];
+    updatedPhotos.splice(index, 1);
+    setRoomPhotos(updatedPhotos);
+  };
+
+  const Roomthumbs = roomPhotos.map((photo, index) => (
+    <div key={index} className='w-32 h-32 m-2 relative z-10'>
+      <img src={photo.preview} alt={`Preview ${index}`} className='w-full h-full object-cover' />
+      <div className='absolute top-0 right-0 p-2'>
+        <FontAwesomeIcon
+          icon={faTrash}
+          size={'2xs'}
+          onClick={() => deleteRoomPhoto(index)}
+          className='bg-black text-white p-2 rounded-md hover:bg-[#FF7400] duration-100 transition transform scale-105 hover:scale-125 cursor-pointer absolute top-0 right-1 lg:right-0 mt-2 mr-3'
+        />
+      </div>
+    </div>
+  ));
+
   return (
     <>
       <div className='fixed top-0 right-0 z-50'>
@@ -350,7 +435,7 @@ const VillaDetailEdit = () => {
                       Edit
                     </button>
                   </div>
-                  <MapVilla data={villa} />
+                  <MapVillaEdit data={villa} />
                 </div>
               )}
             </div>
@@ -412,7 +497,7 @@ const VillaDetailEdit = () => {
             </div>
 
             {/* Category */}
-            <div className='flex gap-2 mb-5'>
+            {/* <div className='flex gap-2 mb-5'>
               {isEditingCategory ? (
                 <div>
                   <div className='mb-6'>
@@ -467,7 +552,7 @@ const VillaDetailEdit = () => {
                   </button>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Photo */}
             <div className='mb-6'>
@@ -535,7 +620,7 @@ const VillaDetailEdit = () => {
             </div>
 
             {/* House Rules */}
-            <div className='mb-6  gap-2'>
+            {/* <div className='mb-6  gap-2'>
               <div>
                 <label htmlFor='houserules' className='block mb-2 text-medium font-medium text-gray-900'>
                   House Rules<span className='text-orange-500'>:</span>
@@ -548,7 +633,7 @@ const VillaDetailEdit = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* Room Information */}
             <div>
@@ -603,6 +688,109 @@ const VillaDetailEdit = () => {
                   ))}
                 </div>
               </div>
+
+              {isAddRoom ? (
+                <div className='mb-6 mt-4'>
+                  <label className='block mb-2 text-lg font-semibold text-gray-900 '>Add New room</label>
+                  <>
+                    <div>
+                      <label className='text-medium  text-gray-900 mr-2'>
+                        Room name<span className='text-orange-500'>*</span>
+                      </label>
+                      <input
+                        onChange={(e) => setRoomName(e.target.value)}
+                        type='text'
+                        id='roomName'
+                        className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                        placeholder='Example : Double Standard'
+                        required
+                      ></input>
+                    </div>
+                    <div className='flex gap-2'>
+                      <div className='w-full'>
+                        <label className='text-medium  text-gray-900 mr-2'>
+                          Bed<span className='text-orange-500'>*</span>
+                        </label>
+                        <input
+                          onChange={(e) => setBed(parseInt(e.target.value))}
+                          type='number'
+                          id='roomBed'
+                          className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                          required
+                        ></input>
+                      </div>
+                      <div className='w-full'>
+                        <label className='text-medium  text-gray-900 mr-2'>
+                          Bathroom<span className='text-orange-500'>*</span>
+                        </label>
+                        <input
+                          onChange={(e) => setBath(parseInt(e.target.value))}
+                          type='number'
+                          id='roomBath'
+                          className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                          required
+                        ></input>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className='text-medium  text-gray-900 mr-2'>
+                        Price<span className='text-orange-500'>*</span>
+                      </label>
+                      <input
+                        onChange={(e) => setPrice(parseInt(e.target.value))}
+                        type='number'
+                        id='roomPrice'
+                        className='border  text-gray-900 text-sm rounded-lg  focus:border-orange-500 focus:border-2 focus:ring-orange-500 outline-none block w-full p-2.5  border-orange-300 dark:placeholder-gray-400 '
+                        placeholder='Example : 275000'
+                        required
+                      ></input>
+                    </div>
+
+                    {/* Room Photo */}
+                    <div className='mb-6'>
+                      <label className='block mb-2 text-medium font-medium text-gray-900 mt-3'>
+                        Add Room Photos<span className='text-orange-500'>*</span>
+                      </label>
+                      <div className='border p-5   text-gray-900 text-sm rounded-lg  focus:border-orange-500 hover:border-2 focus:ring-orange-500 outline-none block w-full  border-orange-300 dark:placeholder-gray-400 '>
+                        <div
+                          {...getRootPropsRoom()}
+                          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-orange-100 border-orange-300 hover:border-orange-500 ${isDragActiveRoom ? 'border-blue-500' : 'border-gray-300'}`}
+                        >
+                          <input {...getInputPropsRoom()} disabled={roomPhotos.length >= 6} />
+                          <p>Drag and drop some files here, or click to select files (Maks 6 photo)</p>
+                        </div>
+                        {Roomthumbs.length > 0 && <div className='flex flex-wrap mt-4'>{Roomthumbs}</div>}
+                        {roomPhotos.length >= 6 && <p className='mt-4 text-red-500'>You have reached the maximum limit of 6 photos.</p>}
+                      </div>
+                    </div>
+                  </>
+
+                  {/* New Room */}
+
+                  {/* <div className='flex justify-end'>
+              <div onClick={addRoomForm} className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer'>
+                Add Room +
+              </div>
+            </div> */}
+                </div>
+              ) : (
+                <></>
+              )}
+              {isAddRoom ? (
+                <div className='flex mt-2'>
+                  <button className='bg-green-500 text-white px-4 py-1 rounded-md mx-2' onClick={handleSaveAddRoom}>
+                    Save
+                  </button>
+                  <button className='bg-red-500 text-white px-4 py-1 rounded-md mx-2' onClick={handleCancelClickAddRoom}>
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button className='bg-blue-500 text-white px-4 py-1 rounded-md' onClick={handleClickAddRoom}>
+                  Add room +
+                </button>
+              )}
             </div>
           </>
         )}

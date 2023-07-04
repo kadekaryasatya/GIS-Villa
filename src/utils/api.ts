@@ -163,7 +163,7 @@ async function getFacilitiesList(): Promise<IFacilities[]> {
   return house_rules;
 }
 
-async function postRoomDetail(name: string, idVilla: string, bed: number, bath: number, price: number) {
+async function postRoomDetail(name: string, idVilla: any, bed: number, bath: number, price: number) {
   const room = {
     name: name,
     villa: idVilla,
