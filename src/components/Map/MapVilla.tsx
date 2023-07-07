@@ -4,10 +4,10 @@ import { IVilla } from '../../utils/data';
 import L from 'leaflet';
 import icon from './marker.png';
 import directionIcon from './marker1.png';
-
 import VillaInfo from './VillaInfo';
 import { Link } from 'react-router-dom';
 import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import { useState } from 'react';
 
 export default function MapVilla(props: { data: IVilla }) {
